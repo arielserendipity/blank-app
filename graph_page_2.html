@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>목표 평균 맞추기 (60점)</title>
+    <style>
+        body { margin: 15px; font-family: sans-serif; }
+        canvas#barChart { border: 1px solid #ccc; display: block; margin: 15px auto; max-width: 100%; height: auto; }
+        .button-container { text-align: center; margin-top: 15px; }
+        .button-container button { padding: 8px 15px; font-size: 14px; margin: 0 10px; cursor: pointer; border: 1px solid #aaa; border-radius: 4px; background-color: #f0f0f0; }
+        .button-container button:hover { background-color: #e0e0e0; }
+    </style>
+</head>
+<body>
+    <canvas id="barChart" width="700" height="450">Your browser does not support the canvas element.</canvas>
+    <div class="button-container">
+        <button id="submitButton">제출</button>
+        <button id="hintButton">힌트 보기</button>
+    </div>
+
+    <script>
+    /**
+     * graph_page_2.js (Inline - Query Param Version)
+     * 목표 평균(60점) 맞추기 인터랙티브 막대 차트
+     */
+    const canvas = document.getElementById('barChart');
+    const ctx = canvas.getContext('2d');
+    const submitButton = document.getElementById('submitButton');
+    const hintButton = document.getElementById('hintButton');
+
+    // --- JS 변수 및 함수 정의 (이전과 동일) ---
+    const MAX_POINTS = 100; const MIN_POINTS = 0; const NUM_BARS = 5;
+    const TARGET_AVERAGE = 60; const TARGET_SUM = TARGET_AVERAGE * NUM_BARS;
+    const margin = { top: 30, right: 30, bottom: 40, left: 50 };
+    const chartAreaWidth = canvas.width - margin.left - margin.right;
+    const chartAreaHeight = canvas.height - margin.top - margin.bottom;
+    const barWidth = chartAreaWidth / NUM_BARS * 0.6;
+    const barSpacing = chartAreaWidth / NUM_BARS * 0.4;
+    const unitHeight = chartAreaHeight / MAX_POINTS;
+    let bars = []; let isDragging = false; let draggingBarIndex = -1; let hintActive = false;
+    function initializeBars() { /* ... 동일 ... */
+        bars = [];
+        for (let i = 0; i < NUM_BARS; i++) {
+            const startX = margin.left + (barWidth + barSpacing) * i + barSpacing / 2;
+            bars.push({ x: startX, width: barWidth, heightValue: TARGET_AVERAGE, color: 'lightblue' });
+        }
+    }
+    function drawYAxis() { /* ... 동일 ... */
+        ctx.strokeStyle = 'black'; ctx.lineWidth = 1; ctx.fillStyle = 'black';
+        ctx.font = '12px Arial'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+        ctx.beginPath(); ctx.moveTo(margin.left, margin.top); ctx.lineTo(margin.left, margin.top + chartAreaHeight); ctx.stroke();
+        for (let i = MIN_POINTS; i <= MAX_POINTS; i += 10) {
+            const yPos = margin.top + chartAreaHeight - (i * unitHeight);
+            ctx.beginPath(); ctx.moveTo(margin.left - 5, yPos); ctx.lineTo(margin.left, yPos); ctx.stroke();
+            ctx.fillText(i, margin.left - 8, yPos);
+            if (i > MIN_POINTS) {
+                ctx.save(); ctx.strokeStyle = '#e0e0e0'; ctx.setLineDash([2, 2]); ctx.lineWidth = 0.5;
+                ctx.beginPath(); ctx.moveTo(margin.left, yPos); ctx.lineTo(margin.left + chartAreaWidth, yPos); ctx.stroke();
+                ctx.restore();
+            }
+        }
+    }
+    function drawTargetAverageLine() { /* ... 동일 ... */
+        const avgY = margin.top + chartAreaHeight - (TARGET_AVERAGE * unitHeight);
+        ctx.save(); ctx.strokeStyle = 'red'; ctx.lineWidth = 2; ctx.setLineDash([5, 3]);
+        ctx.beginPath(); ctx.moveTo(margin.left, avgY); ctx.lineTo(margin.left + chartAreaWidth, avgY); ctx.stroke();
+        ctx.restore();
+        ctx.fillStyle = 'red'; ctx.font = '12px Arial'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+        ctx.fillText(`목표 평균: ${TARGET_AVERAGE}`, margin.left + 5, avgY - 5);
+    }
+    function calculateAndDrawCurrentAverage() { /* ... 동일 ... */
+        if (bars.length === 0) return 0;
+        const currentSum = bars.reduce((sum, bar) => sum + bar.heightValue, 0);
+        const currentAverage = currentSum / bars.length;
+        ctx.fillStyle = 'blue'; ctx.font = '12px Arial'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+        ctx.fillText(`현재 평균: ${currentAverage.toFixed(1)}`, canvas.width - margin.right, margin.top - 5);
+        return currentAverage;
+    }
+    function drawBars() { /* ... 동일 ... */
+        const currentAverage = calculateAndDrawCurrentAverage();
+        bars.forEach(bar => {
+            const barHeightPx = bar.heightValue * unitHeight;
+            const barY = margin.top + chartAreaHeight - barHeightPx;
+            if (hintActive) {
+                if (Math.abs(bar.heightValue - currentAverage) < 0.1) { bar.color = 'orange'; }
+                else if (bar.heightValue < currentAverage) { bar.color = 'yellow'; }
+                else { bar.color = 'lightgreen'; }
+            } else { bar.color = 'lightblue'; }
+            ctx.fillStyle = bar.color;
+            ctx.fillRect(bar.x, barY, bar.width, barHeightPx);
+            ctx.fillStyle = 'black'; ctx.font = '14px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+            ctx.fillText(bar.heightValue, bar.x + bar.width / 2, barY - 5);
+        });
+    }
+    function redrawCanvas() { /* ... 동일 ... */
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawYAxis(); drawTargetAverageLine(); drawBars();
+    }
+    function getBarIndexFromCoordinates(mouseX, mouseY) { /* ... 동일 ... */
+        for (let i = 0; i < bars.length; i++) { const bar = bars[i]; const barBottomY = margin.top + chartAreaHeight; if (mouseX >= bar.x && mouseX <= bar.x + bar.width && mouseY >= margin.top && mouseY <= barBottomY) { return i; } } return -1;
+    }
+    function handleMouseDown(event) { /* ... 동일 ... */
+        const rect = canvas.getBoundingClientRect(); const mouseX = event.clientX - rect.left; const mouseY = event.clientY - rect.top; draggingBarIndex = getBarIndexFromCoordinates(mouseX, mouseY); if (draggingBarIndex !== -1) { isDragging = true; canvas.style.cursor = 'grabbing'; }
+    }
+    function handleMouseMove(event) { /* ... 동일 ... */
+        const rect = canvas.getBoundingClientRect(); const mouseX = event.clientX - rect.left; const mouseY = event.clientY - rect.top; if (isDragging && draggingBarIndex !== -1) { const yRelativeToBottom = margin.top + chartAreaHeight - mouseY; let newHeight = Math.round(yRelativeToBottom / unitHeight); newHeight = Math.max(MIN_POINTS, Math.min(MAX_POINTS, newHeight)); if (bars[draggingBarIndex].heightValue !== newHeight) { bars[draggingBarIndex].heightValue = newHeight; redrawCanvas(); } } else { const hoverIndex = getBarIndexFromCoordinates(mouseX, mouseY); canvas.style.cursor = (hoverIndex !== -1) ? 'grab' : 'default'; }
+    }
+    function handleMouseUp() { /* ... 동일 ... */ if (isDragging) { isDragging = false; draggingBarIndex = -1; canvas.style.cursor = 'default'; redrawCanvas(); } }
+    function handleMouseLeave() { /* ... 동일 ... */ if (isDragging) { isDragging = false; draggingBarIndex = -1; canvas.style.cursor = 'default'; redrawCanvas(); } }
+    hintButton.addEventListener('click', () => { /* ... 동일 ... */ hintActive = !hintActive; hintButton.textContent = hintActive ? '힌트 끄기' : '힌트 보기'; redrawCanvas(); });
+
+    // --- 수정된 제출 버튼 리스너 ---
+    submitButton.addEventListener('click', () => {
+        const currentBarHeights = bars.map(bar => bar.heightValue);
+        const heightsString = currentBarHeights.join(','); // 점수 배열을 콤마로 구분된 문자열로 만듬
+        const timestamp = Date.now(); // 현재 시간을 타임스탬프로 사용 (중복 제출 방지용)
+
+        // 새 URL 쿼리 파라미터 문자열 생성 (?submit_page2=타임스탬프&heights=점수들)
+        const newSearchParams = `?submit_page2=${timestamp}&heights=${heightsString}`;
+
+        console.log("Submitting with new search params:", newSearchParams); // 디버깅 로그
+
+        // 현재 페이지 URL의 쿼리 파라미터를 변경하여 Streamlit rerun 트리거
+        // window.location.search = newSearchParams; // 이 방식은 iframe 내부에서는 잘 동작 안 할 수 있음
+        // 부모 프레임(Streamlit 앱)의 URL을 변경하도록 시도
+        window.parent.location.search = newSearchParams;
+
+        // setComponentValue는 더 이상 사용하지 않음
+        // if (typeof Streamlit !== 'undefined') {
+        //      Streamlit.setComponentValue({ type: "bar_heights_page_2", heights: currentBarHeights });
+        // } else { console.error("Streamlit object not found."); }
+    });
+    // --- 제출 버튼 리스너 수정 끝 ---
+
+
+    // 페이지 로드 완료 시 실행 (Streamlit.setFrameHeight 는 components.html에서는 불필요)
+    window.addEventListener('load', () => {
+        if (!canvas || !ctx || !submitButton || !hintButton) { console.error("필수 HTML 요소를 찾을 수 없습니다!"); return; }
+        initializeBars();
+        redrawCanvas(); // 초기 그리기
+        canvas.addEventListener('mousedown', handleMouseDown); canvas.addEventListener('mousemove', handleMouseMove);
+        canvas.addEventListener('mouseup', handleMouseUp); canvas.addEventListener('mouseleave', handleMouseLeave);
+    });
+    </script> </body>
+</html>

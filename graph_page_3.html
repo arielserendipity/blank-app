@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>평균 막대 그래프 (Interactive Bar Chart)</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+            cursor: default; /* 기본 커서 */
+        }
+        canvas:hover {
+            cursor: crosshair; /* 마우스 올리면 십자선 */
+        }
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="barChart" width="700" height="400"></canvas>
+    <button id="hintButton">힌트 보기</button>
+
+    <script>
+        const canvas = document.getElementById('barChart');
+        const ctx = canvas.getContext('2d');
+        const hintButton = document.getElementById('hintButton');
+
+        // --- 상수 정의 ---
+        const yAxisMargin = 50;
+        const chartBottomMargin = 30;
+        const chartTopMargin = 30;
+        const chartAreaHeight = canvas.height - chartBottomMargin - chartTopMargin;
+        const chartAreaWidth = canvas.width - yAxisMargin;
+        const chartOriginX = yAxisMargin;
+        const chartOriginY = canvas.height - chartBottomMargin;
+
+        const maxValue = 10;
+        const unitHeight = chartAreaHeight / maxValue; // 1단위 높이(px) - 이 값 기준으로 모든 높이 계산
+
+        // 막대 초기 설정
+        let bars = [
+            { x: chartOriginX + 30, width: 50, height: getRandomHeight(), color: 'skyblue' },
+            { x: chartOriginX + 130, width: 50, height: getRandomHeight(), color: 'skyblue' },
+            { x: chartOriginX + 230, width: 50, height: getRandomHeight(), color: 'skyblue' },
+            { x: chartOriginX + 330, width: 50, height: getRandomHeight(), color: 'skyblue' },
+            { x: chartOriginX + 430, width: 50, height: getRandomHeight(), color: 'skyblue' },
+            { x: chartOriginX + 530, width: 50, height: getRandomHeight(), color: 'skyblue' }
+        ];
+
+        let draggingBar = null;
+        let hintActive = false;
+
+        // --- 함수 정의 ---
+
+        function getRandomHeight() {
+            return Math.floor(Math.random() * maxValue) + 1;
+        }
+
+        function calculateAverageHeight() {
+            if (bars.length === 0) return 0;
+            const totalHeight = bars.reduce((sum, bar) => sum + bar.height, 0);
+            return totalHeight / bars.length;
+        }
+
+        // Y축 및 가로 보조선 그리기
+        function drawYAxisAndGrid() {
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 1;
+            ctx.fillStyle = 'black';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'right';
+
+            // 세로 축선
+            ctx.beginPath();
+            ctx.moveTo(chartOriginX, chartTopMargin);
+            ctx.lineTo(chartOriginX, chartOriginY);
+            ctx.stroke();
+
+            // 눈금, 레이블, 가로 보조선 (0부터 maxValue까지)
+            for (let i = 0; i <= maxValue; i++) {
+                const yPos = chartOriginY - (i * unitHeight); // 눈금/보조선의 Y좌표
+
+                // 눈금 (Y축에 짧게)
+                ctx.beginPath();
+                ctx.moveTo(chartOriginX - 5, yPos);
+                ctx.lineTo(chartOriginX, yPos);
+                ctx.stroke();
+
+                // 레이블 (Y축 왼쪽에 숫자)
+                ctx.fillText(i, chartOriginX - 10, yPos + 4);
+
+                // 가로 보조선 (0 제외, 1부터 maxValue까지)
+                if (i > 0) {
+                    ctx.save(); // 현재 선 스타일 저장
+                    ctx.strokeStyle = '#e0e0e0'; // 연한 회색
+                    ctx.setLineDash([2, 2]); // 점선
+                    ctx.lineWidth = 0.5; // 얇게
+                    ctx.beginPath();
+                    ctx.moveTo(chartOriginX, yPos); // Y축에서 시작
+                    ctx.lineTo(canvas.width, yPos); // 캔버스 끝까지
+                    ctx.stroke();
+                    ctx.restore(); // 이전 선 스타일 복원 (strokeStyle, lineDash, lineWidth)
+                }
+            }
+        }
+
+        // 평균선 그리기
+        function drawAverageLine(averageHeight) {
+            const averageHeightPx = averageHeight * unitHeight;
+            const averageLineY = chartOriginY - averageHeightPx;
+
+            if (averageLineY >= chartTopMargin && averageLineY <= chartOriginY) {
+                ctx.save(); // 스타일 저장
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(chartOriginX, averageLineY);
+                ctx.lineTo(canvas.width, averageLineY);
+                ctx.stroke();
+                ctx.restore(); // 스타일 복원
+
+                ctx.fillStyle = 'red';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText(`평균: ${averageHeight.toFixed(1)}`, chartOriginX + 10, averageLineY - 10);
+            }
+        }
+
+        // 모든 요소 그리기 (메인 함수)
+        function drawAll() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawYAxisAndGrid(); // Y축 및 가로 보조선 그리기
+
+            const averageHeight = calculateAverageHeight();
+
+            // 각 막대 그리기
+            bars.forEach(bar => {
+                // 막대 높이(px)와 Y좌표 계산 (정수 bar.height 기준)
+                const barHeightPx = bar.height * unitHeight;
+                const barTopY = chartOriginY - barHeightPx;
+                const barBottomY = chartOriginY;
+
+                // 힌트 모드에 따른 색상 처리
+                if (!hintActive) {
+                    ctx.fillStyle = 'skyblue';
+                    ctx.fillRect(bar.x, barTopY, bar.width, barHeightPx);
+                } else {
+                    const averageHeightPx = averageHeight * unitHeight;
+                    const averageLineY = chartOriginY - averageHeightPx;
+
+                    if (Math.abs(bar.height - averageHeight) < 0.001) {
+                        ctx.fillStyle = 'orange';
+                        ctx.fillRect(bar.x, barTopY, bar.width, barHeightPx);
+                    } else if (bar.height < averageHeight) {
+                        ctx.fillStyle = 'skyblue';
+                        ctx.fillRect(bar.x, barTopY, bar.width, barHeightPx);
+                        if (averageLineY < barTopY) {
+                            ctx.fillStyle = 'yellow';
+                            ctx.fillRect(bar.x, averageLineY, bar.width, barTopY - averageLineY);
+                        }
+                    } else { // bar.height > averageHeight
+                        // Draw skyblue part up to average line first
+                         if (averageLineY > barTopY) { // Ensure average line is below bar top
+                            ctx.fillStyle = 'skyblue';
+                            ctx.fillRect(bar.x, averageLineY, bar.width, barBottomY - averageLineY);
+                         } else { // If average is somehow above bar top (should not happen for > avg)
+                             // Optionally draw the whole bar skyblue if needed, though logic implies avg is lower
+                         }
+                         // Then draw green part above average line
+                         ctx.fillStyle = 'green';
+                         ctx.fillRect(bar.x, barTopY, bar.width, Math.max(0, averageLineY - barTopY)); // Use Math.max to avoid negative height
+                    }
+                }
+
+                // 막대 높이 텍스트
+                ctx.fillStyle = 'black';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                const textY = Math.max(chartTopMargin + 15, barTopY - 5);
+                ctx.fillText(bar.height, bar.x + bar.width / 2, textY);
+            });
+
+            drawAverageLine(averageHeight); // 평균선 그리기
+        }
+
+        // --- 이벤트 리스너 ---
+
+        canvas.addEventListener('mousedown', (e) => {
+            const mouseX = e.offsetX;
+            const mouseY = e.offsetY;
+            for (let i = 0; i < bars.length; i++) {
+                const bar = bars[i];
+                const barTopY = chartOriginY - (bar.height * unitHeight);
+                const barBottomY = chartOriginY;
+                if (mouseX >= bar.x && mouseX <= bar.x + bar.width &&
+                    mouseY >= barTopY && mouseY <= barBottomY) {
+                    draggingBar = bar;
+                    canvas.style.cursor = 'grabbing';
+                    break;
+                }
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (draggingBar) {
+                const mouseY = e.offsetY;
+                // 마우스 위치를 가장 가까운 정수 높이로 변환
+                const yRelativeToChartBottom = chartOriginY - mouseY;
+                let newHeight = Math.round(yRelativeToChartBottom / unitHeight); // Math.round 사용으로 가장 가까운 정수 선택
+                newHeight = Math.max(1, Math.min(maxValue, newHeight)); // 범위 제한 (1 ~ maxValue)
+
+                if (draggingBar.height !== newHeight) {
+                    draggingBar.height = newHeight;
+                    drawAll();
+                }
+            }
+        });
+
+        function stopDragging() {
+             if (draggingBar) {
+                draggingBar = null;
+                canvas.style.cursor = 'crosshair';
+                // 드래그 종료 시 최종 상태 그리기는 mousemove에서 처리되므로 여기서 drawAll() 호출은 생략 가능
+                // drawAll(); // 필요시 최종 상태 보장을 위해 호출
+             }
+        }
+        canvas.addEventListener('mouseup', stopDragging);
+        canvas.addEventListener('mouseleave', () => {
+            if (draggingBar) {
+                stopDragging();
+            }
+            canvas.style.cursor = 'default';
+        });
+        canvas.addEventListener('mouseover', (e) => {
+             // 드래그 중이 아닐 때만 커서 변경
+            if (!draggingBar) {
+                canvas.style.cursor = 'crosshair';
+            }
+        });
+
+        hintButton.addEventListener('click', () => {
+            hintActive = !hintActive;
+            hintButton.textContent = hintActive ? '힌트 끄기' : '힌트 보기';
+            drawAll();
+        });
+
+        // --- 초기화 ---
+        drawAll();
+
+    </script>
+</body>
+</html>
