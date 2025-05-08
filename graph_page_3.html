@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/@streamlit/lib@0.1.2/dist/streamlit-component-lib.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>평균 막대 그래프 (Interactive Bar Chart)</title>
@@ -10,21 +11,29 @@
             display: block;
             margin: 20px auto;
             cursor: default; /* 기본 커서 */
+            background-color: #f9f9f9; /* 배경색 추가 */
         }
         canvas:hover {
             cursor: crosshair; /* 마우스 올리면 십자선 */
         }
         button {
-            display: block;
-            margin: 10px auto;
+            /* 버튼 스타일 유지 또는 필요에 따라 조정 */
+            display: block; /* Streamlit 기본 스타일과 충돌 방지 위해 display block 유지 */
+            /* margin: 10px auto; /* Streamlit 레이아웃에서는 이 margin이 잘 작동 안 할 수 있음 */
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
         }
+        /* 추가: Streamlit 컴포넌트의 기본 컨테이너 스타일 재정의 방지 */
+        #root { overflow: visible !important; }
+
     </style>
 </head>
 <body>
     <canvas id="barChart" width="700" height="400"></canvas>
+    <!-- 힌트 버튼은 Page 2 에서는 필요 없지만, Page 4에서는 필요할 수 있습니다.
+         Page 3 설정 페이지에서는 그래프가 표시되지 않으므로 힌트 버튼도 의미 없습니다.
+         이 HTML은 Page 4에서만 사용되므로 힌트 버튼은 Page 4용입니다. -->
     <button id="hintButton">힌트 보기</button>
 
     <script>
@@ -41,33 +50,66 @@
         const chartOriginX = yAxisMargin;
         const chartOriginY = canvas.height - chartBottomMargin;
 
+        const minValue = 1; // 최소값 추가 (막대 높이는 1~10 사이)
         const maxValue = 10;
-        const unitHeight = chartAreaHeight / maxValue; // 1단위 높이(px) - 이 값 기준으로 모든 높이 계산
+        const unitHeight = chartAreaHeight / maxValue; // 1단위 높이(px)
 
-        // 막대 초기 설정
+        // 막대 초기 설정 (Page 4 진입 시 항상 동일한 초기값으로 시작)
         let bars = [
-            { x: chartOriginX + 30, width: 50, height: getRandomHeight(), color: 'skyblue' },
-            { x: chartOriginX + 130, width: 50, height: getRandomHeight(), color: 'skyblue' },
-            { x: chartOriginX + 230, width: 50, height: getRandomHeight(), color: 'skyblue' },
-            { x: chartOriginX + 330, width: 50, height: getRandomHeight(), color: 'skyblue' },
-            { x: chartOriginX + 430, width: 50, height: getRandomHeight(), color: 'skyblue' },
-            { x: chartOriginX + 530, width: 50, height: getRandomHeight(), color: 'skyblue' }
+            { x: chartOriginX + 30, width: 50, height: 5, color: 'skyblue' },
+            { x: chartOriginX + 130, width: 50, height: 5, color: 'skyblue' },
+            { x: chartOriginX + 230, width: 50, height: 5, color: 'skyblue' },
+            { x: chartOriginX + 330, width: 50, height: 5, color: 'skyblue' },
+            { x: chartOriginX + 430, width: 50, height: 5, color: 'skyblue' },
+            { x: chartOriginX + 530, width: 50, height: 5, color: 'skyblue' }
         ];
 
         let draggingBar = null;
-        let hintActive = false;
+        let hintActive = false; // 힌트 모드 상태
+        let targetAverage = 5; // Python에서 받을 목표 평균 값 (기본값 5)
+
+        // Python에서 보내준 targetAverage 값을 받는 리스너
+        // Page 3에서 설정한 값이 graph_page_3.html을 로드할 때 스크립트 태그로 주입됩니다.
+        // 해당 값은 window.pythonTargetAverage 변수에 저장되어 있습니다.
+        if (window.pythonTargetAverage !== undefined) {
+            targetAverage = window.pythonTargetAverage;
+             console.log("Received target average from Python:", targetAverage);
+        } else {
+             console.warn("Target average not received from Python, using default:", targetAverage);
+        }
+
 
         // --- 함수 정의 ---
 
-        function getRandomHeight() {
-            return Math.floor(Math.random() * maxValue) + 1;
-        }
+        // getRandomHeight 함수는 초기값 고정을 위해 사용하지 않음
+        // function getRandomHeight() {
+        //     return Math.floor(Math.random() * maxValue) + 1;
+        // }
 
         function calculateAverageHeight() {
             if (bars.length === 0) return 0;
             const totalHeight = bars.reduce((sum, bar) => sum + bar.height, 0);
             return totalHeight / bars.length;
         }
+
+         // 모든 막대의 현재 높이 값을 배열로 가져오는 함수
+         function getCurrentBarValues() {
+             return bars.map(bar => bar.height);
+         }
+
+         // Streamlit으로 현재 막대 값들을 보내는 함수
+         function sendValuesToStreamlit() {
+             const currentValues = getCurrentBarValues();
+             if (window.Streamlit) {
+                 // Streamlit.setComponentValue는 JSON 직렬화 가능한 값을 보냅니다.
+                 // 파이썬에서 st.session_state[key]로 이 값을 접근할 수 있습니다.
+                 Streamlit.setComponentValue({ values: currentValues });
+                 // console.log("Sent values to Streamlit:", currentValues); // 디버깅용
+             } else {
+                 console.warn("Streamlit component API not available.");
+             }
+         }
+
 
         // Y축 및 가로 보조선 그리기
         function drawYAxisAndGrid() {
@@ -106,33 +148,59 @@
                     ctx.moveTo(chartOriginX, yPos); // Y축에서 시작
                     ctx.lineTo(canvas.width, yPos); // 캔버스 끝까지
                     ctx.stroke();
-                    ctx.restore(); // 이전 선 스타일 복원 (strokeStyle, lineDash, lineWidth)
+                    ctx.restore(); // 이전 선 스타일 복원
                 }
             }
         }
 
-        // 평균선 그리기
-        function drawAverageLine(averageHeight) {
-            const averageHeightPx = averageHeight * unitHeight;
-            const averageLineY = chartOriginY - averageHeightPx;
+        // 평균선 그리기 (목표 평균과 현재 평균 모두 표시)
+        function drawAverageLines() {
+            // 현재 평균
+            const currentAverageHeight = calculateAverageHeight();
+            const currentAverageHeightPx = currentAverageHeight * unitHeight;
+            const currentAverageLineY = chartOriginY - currentAverageHeightPx;
 
-            if (averageLineY >= chartTopMargin && averageLineY <= chartOriginY) {
+            if (currentAverageLineY >= chartTopMargin && currentAverageLineY <= chartOriginY + 10) { // +10 여유분
                 ctx.save(); // 스타일 저장
-                ctx.strokeStyle = 'red';
+                ctx.strokeStyle = 'blue'; // 현재 평균은 파란색
                 ctx.lineWidth = 2;
                 ctx.setLineDash([5, 5]);
                 ctx.beginPath();
-                ctx.moveTo(chartOriginX, averageLineY);
-                ctx.lineTo(canvas.width, averageLineY);
+                ctx.moveTo(chartOriginX, currentAverageLineY);
+                ctx.lineTo(canvas.width, currentAverageLineY);
+                ctx.stroke();
+                ctx.restore(); // 스타일 복원
+
+                ctx.fillStyle = 'blue';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText(`현재 평균: ${currentAverageHeight.toFixed(1)}`, chartOriginX + 10, currentAverageLineY - 10);
+            }
+
+             // 목표 평균 (Python에서 받아온 값)
+            const targetAverageHeightPx = targetAverage * unitHeight;
+            const targetAverageLineY = chartOriginY - targetAverageHeightPx;
+
+             if (targetAverageLineY >= chartTopMargin && targetAverageLineY <= chartOriginY + 10) { // +10 여유분
+                ctx.save(); // 스타일 저장
+                ctx.strokeStyle = 'red'; // 목표 평균은 빨간색
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(chartOriginX, targetAverageLineY);
+                ctx.lineTo(canvas.width, targetAverageLineY);
                 ctx.stroke();
                 ctx.restore(); // 스타일 복원
 
                 ctx.fillStyle = 'red';
                 ctx.font = '16px Arial';
                 ctx.textAlign = 'left';
-                ctx.fillText(`평균: ${averageHeight.toFixed(1)}`, chartOriginX + 10, averageLineY - 10);
-            }
+                // 목표 평균 텍스트 위치 조정 (현재 평균과 겹치지 않게)
+                const targetAvgTextY = (currentAverageLineY === targetAverageLineY) ? targetAverageLineY + 20 : targetAverageLineY - 10;
+                ctx.fillText(`목표 평균: ${targetAverage.toFixed(1)}`, chartOriginX + 10, targetAvgTextY);
+             }
         }
+
 
         // 모든 요소 그리기 (메인 함수)
         function drawAll() {
@@ -140,7 +208,7 @@
 
             drawYAxisAndGrid(); // Y축 및 가로 보조선 그리기
 
-            const averageHeight = calculateAverageHeight();
+            const averageHeight = calculateAverageHeight(); // 현재 평균 계산
 
             // 각 막대 그리기
             bars.forEach(bar => {
@@ -149,35 +217,42 @@
                 const barTopY = chartOriginY - barHeightPx;
                 const barBottomY = chartOriginY;
 
-                // 힌트 모드에 따른 색상 처리
+                // 힌트 모드에 따른 색상 처리 (목표 평균 기준)
                 if (!hintActive) {
+                    // 힌트 비활성화 시 기본 색상
                     ctx.fillStyle = 'skyblue';
                     ctx.fillRect(bar.x, barTopY, bar.width, barHeightPx);
                 } else {
-                    const averageHeightPx = averageHeight * unitHeight;
-                    const averageLineY = chartOriginY - averageHeightPx;
+                    // 힌트 활성화 시 초과/미달 색상 (목표 평균 기준)
+                    const targetAverageHeightPx = targetAverage * unitHeight;
+                    const targetAverageLineY = chartOriginY - targetAverageHeightPx;
 
-                    if (Math.abs(bar.height - averageHeight) < 0.001) {
-                        ctx.fillStyle = 'orange';
+                    if (Math.abs(bar.height - targetAverage) < 0.001) { // 목표 평균과 거의 같을 때
+                        ctx.fillStyle = 'orange'; // 또는 다른 색상
                         ctx.fillRect(bar.x, barTopY, bar.width, barHeightPx);
-                    } else if (bar.height < averageHeight) {
+                    } else if (bar.height < targetAverage) { // 목표 평균 미달
+                        // 기본 막대 부분 (하늘색)
                         ctx.fillStyle = 'skyblue';
                         ctx.fillRect(bar.x, barTopY, bar.width, barHeightPx);
-                        if (averageLineY < barTopY) {
-                            ctx.fillStyle = 'yellow';
-                            ctx.fillRect(bar.x, averageLineY, bar.width, barTopY - averageLineY);
+                        // 미달 부분 (노란색)
+                        if (targetAverageLineY < barTopY) { // 목표 평균선이 막대 상단보다 아래에 있을 때
+                             ctx.fillStyle = 'yellow';
+                             // Y좌표: 목표 평균선 높이, 높이: 막대 상단 Y - 목표 평균선 Y
+                             ctx.fillRect(bar.x, targetAverageLineY, bar.width, barTopY - targetAverageLineY);
                         }
-                    } else { // bar.height > averageHeight
-                        // Draw skyblue part up to average line first
-                         if (averageLineY > barTopY) { // Ensure average line is below bar top
+                    } else { // bar.height > targetAverage (목표 평균 초과)
+                        // 기본 막대 부분 (하늘색)
+                        if (targetAverageLineY > barTopY) { // 목표 평균선이 막대 상단보다 위에 있을 때
                             ctx.fillStyle = 'skyblue';
-                            ctx.fillRect(bar.x, averageLineY, bar.width, barBottomY - averageLineY);
-                         } else { // If average is somehow above bar top (should not happen for > avg)
-                             // Optionally draw the whole bar skyblue if needed, though logic implies avg is lower
-                         }
-                         // Then draw green part above average line
+                            // Y좌표: 막대 상단 Y, 높이: 목표 평균선 Y - 막대 상단 Y
+                            ctx.fillRect(bar.x, barTopY, bar.width, targetAverageLineY - barTopY);
+                        }
+                         // 초과 부분 (녹색)
                          ctx.fillStyle = 'green';
-                         ctx.fillRect(bar.x, barTopY, bar.width, Math.max(0, averageLineY - barTopY)); // Use Math.max to avoid negative height
+                         // Y좌표: 막대 상단 Y, 높이: 막대 높이 - (목표 평균 - 막대 값)
+                         // 또는 Y좌표: 목표 평균선 Y, 높이: 막대 상단 Y - 목표 평균선 Y
+                         ctx.fillRect(bar.x, targetAverageLineY, bar.width, Math.max(0, barTopY - targetAverageLineY)); // Use Math.max to avoid negative height
+
                     }
                 }
 
@@ -185,11 +260,12 @@
                 ctx.fillStyle = 'black';
                 ctx.font = '16px Arial';
                 ctx.textAlign = 'center';
+                // 텍스트 위치: 막대 상단 위 또는 최소 chartTopMargin 아래
                 const textY = Math.max(chartTopMargin + 15, barTopY - 5);
                 ctx.fillText(bar.height, bar.x + bar.width / 2, textY);
             });
 
-            drawAverageLine(averageHeight); // 평균선 그리기
+            drawAverageLines(); // 평균선들 그리기
         }
 
         // --- 이벤트 리스너 ---
@@ -201,10 +277,18 @@
                 const bar = bars[i];
                 const barTopY = chartOriginY - (bar.height * unitHeight);
                 const barBottomY = chartOriginY;
+                // 클릭 영역을 막대 전체 높이(최대값 10)로 확장하여 클릭 편의성 높임
+                // 실제 높이와 무관하게 클릭 가능한 상단 Y 좌표를 계산
+                const clickableTopY = chartOriginY - (maxValue * unitHeight); // 최대값 높이의 상단 Y
                 if (mouseX >= bar.x && mouseX <= bar.x + bar.width &&
-                    mouseY >= barTopY && mouseY <= barBottomY) {
+                    mouseY >= clickableTopY && mouseY <= barBottomY) { // 클릭 영역을 막대 전체 영역으로
                     draggingBar = bar;
                     canvas.style.cursor = 'grabbing';
+                    // 드래그 시작 시 힌트 모드 비활성화 (선택 사항)
+                    // if (hintActive) {
+                    //     hintActive = false;
+                    //     hintButton.textContent = '힌트 보기';
+                    // }
                     break;
                 }
             }
@@ -213,14 +297,17 @@
         canvas.addEventListener('mousemove', (e) => {
             if (draggingBar) {
                 const mouseY = e.offsetY;
-                // 마우스 위치를 가장 가까운 정수 높이로 변환
+                // 마우스 Y 좌표를 기준으로 새로운 높이 계산
                 const yRelativeToChartBottom = chartOriginY - mouseY;
-                let newHeight = Math.round(yRelativeToChartBottom / unitHeight); // Math.round 사용으로 가장 가까운 정수 선택
-                newHeight = Math.max(1, Math.min(maxValue, newHeight)); // 범위 제한 (1 ~ maxValue)
+                let newHeight = Math.round(yRelativeToChartBottom / unitHeight); // 가장 가까운 정수 높이
+                newHeight = Math.max(minValue, Math.min(maxValue, newHeight)); // 범위 제한 (minValue ~ maxValue)
 
+                // 높이가 변경되었을 때만 다시 그리기
                 if (draggingBar.height !== newHeight) {
                     draggingBar.height = newHeight;
                     drawAll();
+                     // 드래그 중 실시간 값 업데이트 (선택 사항 - Streamlit 부하 줄이기 위해 dragend에서만 보내는게 좋음)
+                     // sendValuesToStreamlit(); // <<< 비추천: 너무 많은 업데이트 발생
                 }
             }
         });
@@ -229,16 +316,20 @@
              if (draggingBar) {
                 draggingBar = null;
                 canvas.style.cursor = 'crosshair';
-                // 드래그 종료 시 최종 상태 그리기는 mousemove에서 처리되므로 여기서 drawAll() 호출은 생략 가능
-                // drawAll(); // 필요시 최종 상태 보장을 위해 호출
+                // 드래그 종료 시 Streamlit으로 최종 값 전송!
+                sendValuesToStreamlit();
              }
         }
         canvas.addEventListener('mouseup', stopDragging);
         canvas.addEventListener('mouseleave', () => {
+            // 캔버스 밖으로 나갔을 때 드래그 중이면 종료 처리
             if (draggingBar) {
                 stopDragging();
             }
-            canvas.style.cursor = 'default';
+             // 드래그 중이 아닐 때만 커서 변경
+            if (!draggingBar) {
+               canvas.style.cursor = 'default';
+            }
         });
         canvas.addEventListener('mouseover', (e) => {
              // 드래그 중이 아닐 때만 커서 변경
@@ -247,15 +338,46 @@
             }
         });
 
+
+        // 힌트 버튼 클릭 이벤트
         hintButton.addEventListener('click', () => {
             hintActive = !hintActive;
             hintButton.textContent = hintActive ? '힌트 끄기' : '힌트 보기';
             drawAll();
+             // 힌트 모드 변경 시 값을 다시 보낼 필요는 없습니다. (그래프 값 자체가 변한 것이 아니므로)
+             // sendValuesToStreamlit(); // <<< 필요 없음
         });
 
-        // --- 초기화 ---
-        drawAll();
+        // --- Streamlit Render Event Listener ---
+        // 컴포넌트가 로드되거나 상태가 업데이트될 때 (파이썬에서 rerun 될 때) 실행됩니다.
+        // 여기서는 초기 로드 시 현재 막대 값들을 파이썬으로 보냅니다.
+        if (window.Streamlit) {
+            Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, function(event) {
+                 console.log("Streamlit RENDER_EVENT received.");
+                 // 파이썬에서 받은 args를 활용할 수도 있습니다. (현재는 targetAverage만 스크립트 주입으로 처리)
+                 // const args = event.detail.args;
 
+                 // 컴포넌트 로드 또는 리렌더링 시 현재 막대 값들을 Streamlit으로 보냅니다.
+                 // 이렇게 하면 페이지 로드 직후 파이썬에서 초기 값을 받을 수 있습니다.
+                 // 하지만 Page 4의 과제는 제출 버튼으로 값을 확인하므로,
+                 // 사실 이 초기 sendValuesToStreamlit() 호출은 필수적이지는 않습니다.
+                 // 드래그 종료 시 전송하는 것만으로도 충분합니다.
+                 // 초기 값 전송이 필요하다면 이 주석을 해제하세요:
+                 // sendValuesToStreamlit();
+
+                 // 만약 파이썬에서 막대 값을 설정하고 싶다면, args를 읽어서 bars 배열을 업데이트하고 drawAll() 호출 필요.
+                 // 예: if (args && args.initial_values) { bars = args.initial_values.map(...); drawAll(); }
+            });
+             // Streamlit 컴포넌트 준비 완료 알림 (필수)
+             Streamlit.setFrameHeight(); // 컴포넌트 높이 자동 조절
+        }
+
+
+        // --- 초기화 ---
+        // 페이지 로드 후 처음 그리기
+        drawAll();
+        // 초기 로드 시 Streamlit으로 값 보내기는 RENDER_EVENT 리스너에서 처리 (주석 처리됨)
+        // 또는 여기서 바로 호출 sendValuesToStreamlit();
     </script>
 </body>
 </html>
