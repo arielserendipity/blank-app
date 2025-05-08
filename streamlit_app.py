@@ -3,7 +3,9 @@
 
 import streamlit as st
 import streamlit.components.v1 as components # components.html 다시 사용
+from streamlit_option_menu import option_menu
 import json
+import time
 from datetime import datetime
 import os
 # import time # 필요 없음
@@ -58,6 +60,8 @@ for key, value in default_states.items():
 
 # 학생용 페이지 1: 이름 입력
 def student_page_1():
+    elapsed = time.time() - st.session_state.enter_time
+    st.write(f"접속 시간: {elapsed:.2f}초")
     st.header("평균 학습 시작")
     st.write("환영합니다! 저는 평균 학습을 도와주는 김함정이라고 해요. 학생의 이름을 입력하고 평균을 학습하러 가볼까요?")
     name = st.text_input("이름을 입력하세요", key="student_name_input")
@@ -156,6 +160,8 @@ def teacher_page():
 
 # 메인 페이지 (변경 없음)
 def main_page():
+    if 'enter_time' not in st.session_state:
+        st.session_state.enter_time = time.time()
     st.title("📊 평균 학습 웹 앱")
     st.write("학생 또는 교사로 접속하여 평균 개념을 학습하거나 학습 현황을 확인해보세요.")
     user_type = st.radio("접속 유형 선택:", ("학생용", "교사용"), key="user_type_radio", horizontal=True)
@@ -169,5 +175,27 @@ pages = {
     'main': main_page, 'student_page_1': student_page_1, 'student_page_2': student_page_2,
     'student_page_3': student_page_3, 'teacher_page': teacher_page,
 }
+
+with st.sidebar:
+    menu = {
+        "main": "홈",
+        "student_page_1": "학생: 이름 입력",
+        "student_page_2": "학생: 목표 평균",
+        "student_page_3": "학생: 나만의 평균",
+        "teacher_page": "교사용"
+    }
+    page_keys = list(menu.keys())
+    page_labels = list(menu.values())
+    selected = option_menu(
+        "메뉴", page_labels,
+        icons=['house', 'person', 'bar-chart', 'star', 'lock'],
+        menu_icon="app-indicator", default_index=page_keys.index(st.session_state['page']) if st.session_state['page'] in page_keys else 0,
+    )
+    # 메뉴 선택 시 페이지 이동
+    selected_key = page_keys[page_labels.index(selected)]
+    if st.session_state['page'] != selected_key:
+        st.session_state['page'] = selected_key
+        st.rerun()
+    
 render_page = pages.get(st.session_state['page'], main_page)
 render_page()
