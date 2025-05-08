@@ -12,6 +12,9 @@ import os
 
 # from graph_component import interactive_graph # 커스텀 컴포넌트 import 삭제
 
+from openai import OpenAI
+client = OpenAI()
+
 # --- 상수 정의 ---
 TEACHER_PASSWORD = "2025"
 STUDENT_DATA_DIR = "student_data"
@@ -106,9 +109,22 @@ def student_page_2():
         st.session_state['scores_page_2'] = None
         st.rerun()
 
+
     if st.button("이전"):
         st.session_state['page'] = 'student_page_1'
         st.rerun()
+
+    # AI 붙이기 테스트
+    prompt = st.chat_input("메시지를 입력하세요.")
+    if prompt:
+        with st.chat_message("user"):
+            st.write(prompt)
+        with st.chat_message("ai", avatar="🤖"):
+            response = client.responses.create(
+                model="gpt-4.1",
+                input=prompt,
+            )
+            st.write(response.output_text)
 
     # --- 피드백 및 조건부 버튼 로직 삭제 ---
     # (위 버튼으로 바로 이동하므로 제거)
