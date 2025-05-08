@@ -72,6 +72,9 @@ def student_page_1():
             st.session_state.update({'feedback_page_2': None, 'scores_page_2': None, 'page': 'student_page_2'})
             st.rerun()
         else: st.warning("이름을 입력해주세요.")
+    if st.button("이전"):
+        st.session_state['page'] = 'main'
+        st.rerun()
 
 # 학생용 페이지 2: 목표 평균 맞추기 (components.html 사용, 무조건 페이지 3 이동)
 def student_page_2():
@@ -101,6 +104,10 @@ def student_page_2():
         # 페이지 2 관련 상태 초기화 (선택적)
         st.session_state['feedback_page_2'] = None
         st.session_state['scores_page_2'] = None
+        st.rerun()
+
+    if st.button("이전"):
+        st.session_state['page'] = 'student_page_1'
         st.rerun()
 
     # --- 피드백 및 조건부 버튼 로직 삭제 ---
@@ -136,6 +143,9 @@ def student_page_3():
         if st.button("다른 평균으로 변경하기"):
             st.session_state['show_graph_page_3'] = False
             st.rerun()
+    if st.button("이전"):
+        st.session_state['page'] = 'student_page_2'
+        st.rerun()
 
 # 교사용 페이지 (변경 없음)
 def teacher_page():
@@ -157,6 +167,9 @@ def teacher_page():
                 st.json(student_data)
             except Exception as e: st.error(f"데이터 로딩 중 오류 발생: {e}")
     elif password: st.error("비밀번호가 틀렸습니다.")
+    if st.button("이전"):
+        st.session_state['page'] = 'main'
+        st.rerun()
 
 # 메인 페이지 (변경 없음)
 def main_page():
