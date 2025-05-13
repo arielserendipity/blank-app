@@ -438,6 +438,11 @@ def student_page_2_graph60():
         except Exception as e:
             st.error(f"HTML 컴포넌트 로딩 중 오류 발생: {e}")
 
+    from draggable_barchart import draggable_barchart
+    result = draggable_barchart("graph_page_2")
+    
+    st.write(result) # 드래그한 결과를 표시 (예시로 사용, 필요에 따라 수정 가능)
+
     # 과제 컬럼에 과제 UI 배치
     with task_col:
         st.subheader("과제 1")
