@@ -1,6 +1,7 @@
 # streamlit_app.py 파일의 전체 내용입니다.
 
 import streamlit as st
+from draggable_barchart import draggable_barchart
 
 # --- 페이지 설정 (가장 먼저 호출) ---
 st.set_page_config(layout="wide") # 화면 너비를 최대한 사용하도록 설정
@@ -426,22 +427,30 @@ def student_page_2_graph60():
 
     # 그래프 컬럼에 그래프 배치
     with graph_col:
-        # HTML 파일 로드 및 표시 (components.html 사용)
-        # Page 2 그래프는 값 전달 기능 필요 없음. 간단히 표시만. key는 필수 인자가 아닙니다.
-        try:
-            with open("graph_page_2.html", "r", encoding="utf-8") as f:
-                html_graph_1 = f.read()
-            # 'key' 인자 제거 (오류 해결)
-            components.html(html_graph_1, height=550)
-        except FileNotFoundError:
-            st.error("오류: graph_page_2.html 파일을 찾을 수 없습니다. 스크립트와 같은 폴더에 있는지 확인하세요.")
-        except Exception as e:
-            st.error(f"HTML 컴포넌트 로딩 중 오류 발생: {e}")
-
-    from draggable_barchart import draggable_barchart
-    result = draggable_barchart("graph_page_2")
-    
-    st.write(result) # 드래그한 결과를 표시 (예시로 사용, 필요에 따라 수정 가능)
+        if 'graph_trial' not in st.session_state:
+            st.session_state['graph_trial'] = 0
+        elif st.session_state['graph_trial'] > 2:
+            if len(st.session_state.get('chat_log', [])) == 0:
+                st.session_state['chat_log'] = [
+                    {"role": "assistant", "content": "그래프를 조정하는 데 어려움을 겪고 있는 것 같아요. 그래프의 높낮이를 조절하면서 어떤 변화가 있는지 살펴보세요."},
+                ]
+        if 'graph_prev_values' not in st.session_state:
+            st.session_state['graph_prev_values'] = (0, 0, 0, 0, 0)
+        result = tuple(draggable_barchart("graph_page_2"))
+        if result != st.session_state['graph_prev_values']:
+            st.session_state['graph_trial'] += 1
+            st.session_state['graph_prev_values'] = result
+        # # HTML 파일 로드 및 표시 (components.html 사용)
+        # # Page 2 그래프는 값 전달 기능 필요 없음. 간단히 표시만. key는 필수 인자가 아닙니다.
+        # try:
+        #     with open("graph_page_2.html", "r", encoding="utf-8") as f:
+        #         html_graph_1 = f.read()
+        #     # 'key' 인자 제거 (오류 해결)
+        #     components.html(html_graph_1, height=550)
+        # except FileNotFoundError:
+        #     st.error("오류: graph_page_2.html 파일을 찾을 수 없습니다. 스크립트와 같은 폴더에 있는지 확인하세요.")
+        # except Exception as e:
+        #     st.error(f"HTML 컴포넌트 로딩 중 오류 발생: {e}")
 
     # 과제 컬럼에 과제 UI 배치
     with task_col:
@@ -490,6 +499,33 @@ def student_page_2_graph60():
                  st.warning(st.session_state['p2p1_feedback'])
                  # 오답 횟수 표시 (선택 사항)
                  # st.info(f"현재 오답 시도 횟수: {st.session_state['p2p1_attempts']}회")
+
+        chatLog = st.session_state.get('chat_log', [])
+        if len(chatLog) > 0:
+            for i, chat in enumerate(chatLog):
+                if chat["role"] == "system": continue # 시스템 메시지는 표시하지 않음
+                with st.chat_message(chat["role"]):
+                    st.markdown(chat["content"])
+            
+            # 채팅 입력창
+            chat_input = st.chat_input("답변:")
+            if chat_input:
+                # 사용자의 입력을 채팅 로그에 추가
+                st.session_state['chat_log'].append({"role": "system", "content": "학생이 그래프를 조작하고 있습니다. 그래프의 값: " + str(result)})
+                st.session_state['chat_log'].append({"role": "user", "content": chat_input})
+                st.rerun()
+            
+            elif chatLog[-1]["role"] == "user":
+                response = client.chat.completions.create(
+                    model="gpt-4.1",
+                    messages=st.session_state['chat_log'],
+                )
+
+                print(response)
+
+                # GPT의 응답을 채팅 로그에 추가
+                st.session_state['chat_log'].append({"role": "assistant", "content": response.choices[0].message.content})
+                st.rerun()
 
 
         # 다음 페이지 이동 버튼 (과제 1 정답 시 활성화)

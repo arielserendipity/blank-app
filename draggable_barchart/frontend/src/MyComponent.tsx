@@ -146,6 +146,7 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
       justifyContent: "center",
       boxShadow: `inset 0 -10px 10px -10px rgba(128, 128, 128, 0.2), inset 0 10px 10px -10px rgba(128, 128, 128, 0.1)`,
       paddingTop: "1.5rem",
+      paddingBottom: "1.5rem",
     }}>
       <div style={{
         position: "relative",
