@@ -73,14 +73,15 @@ function Bar({ value, onValueChange, targetAverage, label }: { value: number; on
         boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
         borderRadius: '2px 2px 0 0',
       }} />
-      {/* <div style={{
+      <div style={{
+        position: 'absolute',
         width: '3rem',
         height: `${targetAverage - value}%`,
-        marginBottom: `${value}%`,
-        backgroundColor: '#ef9551',
+        bottom: `${value}%`,
+        backgroundColor: (targetAverage - value>0)?'#95ef51':'#9551ef',
         boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
         borderRadius: '2px 2px 0 0',
-      }} /> */}
+      }} />
       <div style={{
         position: 'absolute',
         width: '3rem',
