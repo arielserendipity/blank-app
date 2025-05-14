@@ -443,7 +443,7 @@ def student_page_2_graph60():
                 ]
         if 'graph_prev_values' not in st.session_state:
             st.session_state['graph_prev_values'] = (0, 0, 0, 0, 0)
-        result = tuple(draggable_barchart("graph_page_2"))
+        result = tuple(draggable_barchart("graph_page_2", labels=["1회", "2회", "3회", "4회", "5회"]))
         if result != st.session_state['graph_prev_values']:
             st.session_state['graph_trial'] += 1
             st.session_state['graph_prev_values'] = result
@@ -519,7 +519,9 @@ def student_page_2_graph60():
             chat_input = st.chat_input("답변:")
             if chat_input:
                 # 사용자의 입력을 채팅 로그에 추가
-                st.session_state['chat_log'].append({"role": "system", "content": "학생이 그래프를 조작하고 있습니다. 그래프의 값: " + str(result)})
+                st.session_state['chat_log'].append({"role": "system", "content": "학생이 그래프를 조작하고 있습니다. 그래프의 값: " + str({
+                    f"{i+1}회": v for i, v in enumerate(result)
+                })})
                 st.session_state['chat_log'].append({"role": "user", "content": chat_input})
                 st.rerun()
             

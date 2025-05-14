@@ -17,7 +17,7 @@ function debounce<T extends (...args: any[]) => void>(func: T, wait = 2000): T {
 // Debounced version of Streamlit.setComponentValue with 2s delay
 const debouncedSetComponentValue = debounce(Streamlit.setComponentValue, 2000);
 
-function Bar({ value, onValueChange }: { value: number; onValueChange: (value: number) => void }) {
+function Bar({ value, onValueChange, targetAverage, label }: { value: number; onValueChange: (value: number) => void; targetAverage: number; label?: string }) {
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
@@ -73,13 +73,14 @@ function Bar({ value, onValueChange }: { value: number; onValueChange: (value: n
         boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
         borderRadius: '2px 2px 0 0',
       }} />
-      <div style={{
+      {/* <div style={{
         width: '3rem',
-        height: `${value}%`,
+        height: `${targetAverage - value}%`,
+        marginBottom: `${value}%`,
         backgroundColor: '#ef9551',
         boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
         borderRadius: '2px 2px 0 0',
-      }} />
+      }} /> */}
       <div style={{
         position: 'absolute',
         width: '3rem',
@@ -91,6 +92,22 @@ function Bar({ value, onValueChange }: { value: number; onValueChange: (value: n
       }}>
         {value}
       </div>
+      {label && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "-1.5rem",
+            width: "100%",
+            textAlign: "center",
+            fontSize: "0.85rem",
+            color: "#444",
+            userSelect: "none",
+            pointerEvents: "none",
+          }}
+        >
+          {label}
+        </div>
+      )}
     </div>
   )
 }
@@ -153,7 +170,7 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
       justifyContent: "center",
       boxShadow: `inset 0 -10px 10px -10px rgba(128, 128, 128, 0.2), inset 0 10px 10px -10px rgba(128, 128, 128, 0.1)`,
       paddingTop: "1.5rem",
-      paddingBottom: "1.5rem",
+      paddingBottom: "3.5rem",
     }}>
       <div style={{
         position: "relative",
@@ -207,6 +224,8 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
         <Bar
           key={idx}
           value={val}
+          targetAverage={targetAverage}
+          label={args.labels ? args.labels[idx] : undefined}
           onValueChange={handleValueChange(idx)}
         />
       ))}
