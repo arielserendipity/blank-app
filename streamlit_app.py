@@ -417,6 +417,13 @@ def student_page_1():
 def student_page_2_graph60():
     update_page_state_on_entry() # 페이지 진입 시 상태 업데이트
 
+    if not st.session_state.get('page_2_timer', False):
+        st.session_state['page_2_timer'] = time.time()
+        st.session_state['has_interacted'] = False # 제출 버튼 클릭시 True로 변경
+    elapsed_time = time.time() - st.session_state['page_2_timer']
+    if elapsed_time > INACTIVITY_THRESHOLD_SECONDS and not st.session_state.get('has_interacted', False):
+        st.warning("제출을 5초동안 안하셨습니다", icon="⚠️")
+
     # 제목 배치 (컬럼 레이아웃 위에)
     st.header("목표 평균 60 도전! (과제 1)")
     st.write(f"{st.session_state.get('student_name', '학생')} 학생, 아래 그래프의 막대를 조절하여 평균 60점을 만들어보세요.")
@@ -463,6 +470,7 @@ def student_page_2_graph60():
 
         # 제출 버튼 (정답 맞추면 비활성화)
         if st.button("답변 제출", key="btn_submit_p2p1", disabled=is_input_disabled):
+            st.session_state['has_interacted'] = True # 제출 버튼 클릭 시 True로 변경
             if not student_answer:
                 st.warning("답변을 입력해주세요.")
             else:
