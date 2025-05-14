@@ -31,7 +31,7 @@ function Bar({ value, onValueChange }: { value: number; onValueChange: (value: n
     const rect = e.currentTarget.getBoundingClientRect();
     const offsetY = e.clientY - rect.top;
     const pct = 1 - offsetY / rect.height;
-    const newValue = Math.round(Math.max(0, Math.min(1, pct)) * 100);
+    const newValue = Math.round(Math.max(0, Math.min(1, pct)) * 10) * 10;
     onValueChange(newValue);
   }, []);
 
@@ -66,6 +66,13 @@ function Bar({ value, onValueChange }: { value: number; onValueChange: (value: n
         alignItems: 'center',
       }}
     >
+      <div style={{
+        width: '3rem',
+        height: `${value}%`,
+        backgroundColor: '#ef9551',
+        boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
+        borderRadius: '2px 2px 0 0',
+      }} />
       <div style={{
         width: '3rem',
         height: `${value}%`,
@@ -187,7 +194,7 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
               height: "1px",
               top: `${(100 - targetAverage)}%`,
               fontSize: "0.7rem",
-              border: "1px dashed #f57030",
+              borderTop: "1px dashed #f57030",
               color: "#f57030",
               display: "flex",
               alignItems: "flex-end",
