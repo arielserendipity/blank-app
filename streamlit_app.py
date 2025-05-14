@@ -422,7 +422,7 @@ def student_page_2_graph60():
         st.session_state['has_interacted'] = False # 제출 버튼 클릭시 True로 변경
     elapsed_time = time.time() - st.session_state['page_2_timer']
     if elapsed_time > INACTIVITY_THRESHOLD_SECONDS and not st.session_state.get('has_interacted', False):
-        st.warning("제출을 5초동안 안하셨습니다", icon="⚠️")
+        st.warning("제출을 60초동안 안하셨습니다", icon="⚠️")
 
     # 제목 배치 (컬럼 레이아웃 위에)
     st.header("목표 평균 60 도전! (과제 1)")
@@ -950,26 +950,29 @@ with st.sidebar:
          current_page_label = menu_to_display.get(current_page_key, page_labels[0] if page_labels else "홈")
          default_index = page_labels.index(current_page_label)
 
-
     selected_label = option_menu(
         "메뉴", page_labels,
         icons=['house', 'person', 'bar-chart', 'pencil', 'star', 'check-circle', 'lock'], # 아이콘 추가/변경
         menu_icon="app-indicator",
         default_index=default_index,
-        key="sidebar_menu" # 사이드바 메뉴 자체에 고유 키 추가
+        manual_select=page_keys.index(st.session_state.get('page', 'main')),
+        key="sidebar_menu", # 사이드바 메뉴 자체에 고유 키 추가
     )
-    # 메뉴 선택 시 페이지 이동 (현재 페이지와 다르면 이동)
-    # 선택된 라벨에 해당하는 키를 찾음 (전체 메뉴 기준)
-    selected_key = None
-    for key, label in full_menu.items(): # 전체 메뉴를 기준으로 키를 찾아야 정확함
-        if label == selected_label:
-            selected_key = key
-            break
+    if st.session_state.get('prev_option_selected', None) != selected_label:
+        st.session_state['prev_option_selected'] = selected_label
 
-    if selected_key and st.session_state['page'] != selected_key:
-        st.session_state['page'] = selected_key
-        # 페이지 이동 시 상태 초기화는 update_page_state_on_entry에서 처리됩니다.
-        st.rerun()
+        # 메뉴 선택 시 페이지 이동 (현재 페이지와 다르면 이동)
+        # 선택된 라벨에 해당하는 키를 찾음 (전체 메뉴 기준)
+        selected_key = None
+        for key, label in full_menu.items(): # 전체 메뉴를 기준으로 키를 찾아야 정확함
+            if label == selected_label:
+                selected_key = key
+                break
+
+        if selected_key and st.session_state['page'] != selected_key:
+            st.session_state['page'] = selected_key
+            # 페이지 이동 시 상태 초기화는 update_page_state_on_entry에서 처리됩니다.
+            st.rerun()
 
 
 # 페이지 진입 상태 업데이트 함수 호출 (렌더링 함수 호출 전에)
