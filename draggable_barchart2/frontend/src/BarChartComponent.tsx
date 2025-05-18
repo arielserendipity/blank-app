@@ -15,7 +15,7 @@ function debounce<T extends (...args: any[]) => void>(func: T, wait = 2000): T {
 }
 
 // Debounced version of Streamlit.setComponentValue with 2s delay
-const debouncedSetComponentValue = debounce(Streamlit.setComponentValue, 2000);
+const debouncedSetComponentValue = debounce(Streamlit.setComponentValue, 500);
 
 function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: number; onValueChange: (value: number) => void; targetAverage: number; label?: string; showHint?: boolean }) {
   const [isDragging, setIsDragging] = useState(false);
@@ -31,7 +31,7 @@ function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: 
     const rect = e.currentTarget.getBoundingClientRect();
     const offsetY = e.clientY - rect.top;
     const pct = 1 - offsetY / rect.height;
-    const newValue = Math.round(Math.max(0, Math.min(1, pct)) * 10) * 10;
+    const newValue = Math.round(Math.max(0, Math.min(1, pct)) * 10);
     onValueChange(newValue);
   }, []);
 
@@ -68,18 +68,18 @@ function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: 
     >
       <div style={{
         width: '3rem',
-        height: `${value}%`,
-        backgroundColor: '#ef9551',
+        height: `${value * 10}%`,
+        backgroundColor: '#9551ef',
         boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
         borderRadius: '2px 2px 0 0',
       }} />
-      {showHint && (targetAverage - value > 0 ?
+      {showHint && (targetAverage - value * 10 > 0 ?
         <div style={{
           position: 'absolute',
           width: '3rem',
-          height: `${targetAverage - value}%`,
-          bottom: `${value}%`,
-          backgroundColor: (targetAverage - value>0)?'#95ef51':'#9551ef',
+          height: `${targetAverage - value * 10}%`,
+          bottom: `${value * 10}%`,
+          backgroundColor: (targetAverage - value * 10>0)?'#95ef51':'#9551ef',
           boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
           borderRadius: '2px 2px 0 0',
         }} />
@@ -87,9 +87,9 @@ function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: 
         <div style={{
           position: 'absolute',
           width: '3rem',
-          height: `${value - targetAverage}%`,
+          height: `${value * 10 - targetAverage}%`,
           bottom: `${targetAverage}%`,
-          backgroundColor: (targetAverage - value>0)?'#95ef51':'#9551ef',
+          backgroundColor: (targetAverage - value * 10>0)?'#95ef51':'#9551ef',
           boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
           borderRadius: '2px 2px 0 0',
         }} />
@@ -97,7 +97,7 @@ function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: 
       <div style={{
         position: 'absolute',
         width: '3rem',
-        top: `${93 - value}%`,
+        top: `${93 - value * 10}%`,
         pointerEvents: 'none',
         userSelect: 'none',
         textAlign: 'center',
@@ -131,7 +131,7 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
     const argVals = args.values as number[] | undefined;
     return Array.isArray(argVals) && argVals.length === 5
       ? argVals
-      : [60, 60, 60, 60, 60];
+      : [6, 6, 6, 6, 6];
   });
   const hint = (args.hint || false) as boolean;
 
@@ -148,32 +148,37 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
       const newValues = [...prevValues];
       newValues[index] = newValue;
 
-      // get list of indices sorted by value
-      const sortedIndices = Array.from(Array(newValues.length).keys()).sort((a, b) => newValues[a] - newValues[b]);
-      // move 'index' to the end of the sorted list
-      sortedIndices.splice(sortedIndices.indexOf(index), 1);
+      // // get list of indices sorted by value
+      // const sortedIndices = Array.from(Array(newValues.length).keys()).sort((a, b) => newValues[a] - newValues[b]);
+      // // move 'index' to the end of the sorted list
+      // sortedIndices.splice(sortedIndices.indexOf(index), 1);
 
-      const targetSum = targetAverage * newValues.length;
-      const currentSum = newValues.reduce((acc, val) => acc + val, 0);
-      let diff = targetSum - currentSum;
-      if (diff > 0) {
-        for (let adjustIndex of sortedIndices.concat(index)) {
-          const increment = Math.min(diff, 100 - newValues[adjustIndex]);
-          newValues[adjustIndex] += increment;
-          diff -= increment;
-          }
-      } else {
-        for (let adjustIndex of sortedIndices.reverse().concat(index)) {
-          const decrement = Math.min(-diff, newValues[adjustIndex]);
-          newValues[adjustIndex] -= decrement;
-          diff += decrement;
-        }
-      }
+      // const targetSum = targetAverage * newValues.length;
+      // const currentSum = newValues.reduce((acc, val) => acc + val, 0);
+      // let diff = targetSum - currentSum;
+      // if (diff > 0) {
+      //   for (let adjustIndex of sortedIndices.concat(index)) {
+      //     const increment = Math.min(diff, 100 - newValues[adjustIndex]);
+      //     newValues[adjustIndex] += increment;
+      //     diff -= increment;
+      //     }
+      // } else {
+      //   for (let adjustIndex of sortedIndices.reverse().concat(index)) {
+      //     const decrement = Math.min(-diff, newValues[adjustIndex]);
+      //     newValues[adjustIndex] -= decrement;
+      //     diff += decrement;
+      //   }
+      // }
 
       debouncedSetComponentValue(newValues);
       return newValues;
     });
   };
+
+  const currentAverage = useMemo(() => {
+    const sum = values.reduce((acc, val) => acc + val, 0);
+    return (sum / values.length);
+  }, [values]);
 
   // 4) Render five Bar components side by side
   return (
@@ -215,25 +220,25 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
                 marginLeft: "-1.4rem",
                 textAlign: "right",
               }}>
-                {100 - i * 10}
+                {10 - i}
               </div>
             </div>
           ))
         }
-            <div style={{
-              position: "absolute",
-              width: "32rem",
-              height: "1px",
-              top: `${(100 - targetAverage)}%`,
-              fontSize: "0.7rem",
-              borderTop: "1px dashed #f57030",
-              color: "#f57030",
-              display: "flex",
-              alignItems: "flex-end",
-              paddingLeft: "0.2rem",
-            }}>
-              목표 평균
-            </div>
+        <div style={{
+          position: "absolute",
+          width: "32rem",
+          height: "1px",
+          top: `${(100 - currentAverage * 10)}%`,
+          fontSize: "0.7rem",
+          borderTop: "1px dashed #f57030",
+          color: "#f57030",
+          display: "flex",
+          alignItems: "flex-end",
+          paddingLeft: "0.2rem",
+        }}>
+          현재 평균
+        </div>
       </div>
       {values.map((val, idx) => (
         <Bar
