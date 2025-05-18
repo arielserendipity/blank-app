@@ -228,8 +228,10 @@ default_states = {
     'p4p4_attempts': 0,
 
     # 누적 오답 횟수 팝업 상태 (페이지 2, 4 공통)
-    'show_cumulative_popup5': False,
-    'show_cumulative_popup7': False,
+    'page2_show_cumulative_popup5': False,
+    'page2_show_cumulative_popup7': False,
+    'page4_show_cumulative_popup5': False,
+    'page4_show_cumulative_popup7': False,
 
     # 비활동 감지 타이머
     'last_interaction_time': time.time(),
@@ -257,8 +259,10 @@ def update_page_state_on_entry():
     if current_page != prev_page:
         # --- 페이지 이동 시 공통 초기화 ---
         # 누적 오답 팝업 상태 초기화 (페이지 이동 시 사라져야 함)
-        st.session_state['show_cumulative_popup5'] = False
-        st.session_state['show_cumulative_popup7'] = False
+        st.session_state['page2_show_cumulative_popup5'] = False
+        st.session_state['page2_show_cumulative_popup7'] = False
+        st.session_state['page4_show_cumulative_popup5'] = False
+        st.session_state['page4_show_cumulative_popup7'] = False
         # 문제별 피드백 메시지 초기화 (페이지 이동 시 사라져야 함)
         st.session_state['p2p1_feedback'] = None
         st.session_state['p4p1_feedback'] = None
@@ -328,15 +332,18 @@ def setup_columns_and_display_popups(current_page):
     main_col = None # Page 3용 메인 컬럼 초기화
 
     # 누적 오답 계산 및 팝업 상태 업데이트 (레이아웃 설정 전에 수행)
-    cumulative_attempts = st.session_state.get('p2p1_attempts', 0) + \
-                          st.session_state.get('p4p1_attempts', 0) + \
+    cumulative_attempts2 = st.session_state.get('p2p1_attempts', 0)
+    cumulative_attempts4 = st.session_state.get('p4p1_attempts', 0) + \
                           st.session_state.get('p4p2_attempts', 0) + \
                           st.session_state.get('p4p3_attempts', 0) + \
                           st.session_state.get('p4p4_attempts', 0)
 
     # 누적 오답 상태 업데이트
-    st.session_state['show_cumulative_popup5'] = (cumulative_attempts >= 5)
-    st.session_state['show_cumulative_popup7'] = (cumulative_attempts >= 7)
+    st.session_state['page2_show_cumulative_popup5'] = (cumulative_attempts2 >= 5)
+    st.session_state['page2_show_cumulative_popup7'] = (cumulative_attempts2 >= 7)
+
+    st.session_state['page4_show_cumulative_popup5'] = (cumulative_attempts4 >= 5)
+    st.session_state['page4_show_cumulative_popup7'] = (cumulative_attempts4 >= 7)
 
 
     # 3컬럼 레이아웃이 필요한 페이지 (그래프 | 과제 | 팝업)
@@ -354,10 +361,16 @@ def setup_columns_and_display_popups(current_page):
                  st.info('고민하고 있는건가요? 그래프의 높낮이를 움직이면서 어떤 변화가 있는지 살펴보세요.', icon="💡")
 
             # 누적 오답 팝업 메시지 표시
-            if st.session_state.get('show_cumulative_popup7', False):
-                 st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
-            elif st.session_state.get('show_cumulative_popup5', False):
-                 st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
+            if st.session_state.get('page', 'main') == 'student_page_2_graph60':
+                if st.session_state.get('page2_show_cumulative_popup7', False):
+                    st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
+                elif st.session_state.get('page2_show_cumulative_popup5', False):
+                    st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
+            elif st.session_state.get('page', 'main') == 'student_page_4_myavg_tasks':
+                if st.session_state.get('page4_show_cumulative_popup7', False):
+                    st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
+                elif st.session_state.get('page4_show_cumulative_popup5', False):
+                    st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
 
          # 그래프 컬럼, 과제 컬럼, 팝업 컬럼을 반환
          return graph_col, task_col, popup_col
@@ -373,10 +386,16 @@ def setup_columns_and_display_popups(current_page):
                  st.info('고민하고 있는건가요? 그래프의 높낮이를 움직이면서 어떤 변화가 있는지 살펴보세요.', icon="💡")
 
             # 누적 오답 팝업 (Page 3에서도 Page 2/4의 누적 오답을 표시)
-            if st.session_state.get('show_cumulative_popup7', False):
-                 st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
-            elif st.session_state.get('show_cumulative_popup5', False):
-                 st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
+            if st.session_state.get('page', 'main') == 'student_page_2_graph60':
+                if st.session_state.get('page2_show_cumulative_popup7', False):
+                    st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
+                elif st.session_state.get('page2_show_cumulative_popup5', False):
+                    st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
+            elif st.session_state.get('page', 'main') == 'student_page_4_myavg_tasks':
+                if st.session_state.get('page4_show_cumulative_popup7', False):
+                    st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
+                elif st.session_state.get('page4_show_cumulative_popup5', False):
+                    st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
 
          # Page 3에서는 메인 콘텐츠 컬럼과 팝업 컬럼을 반환 (그래프 컬럼 없음)
          return main_col, None, popup_col # 메인 컬럼, 그래프 컬럼(None), 팝업 컬럼 반환
@@ -888,7 +907,7 @@ def main_page():
                 'p4p2_correct': False, 'p4p2_attempts': 0, 'p4p2_feedback': None,
                 'p4p3_answer': '', 'p4p3_feedback': None, 'p4p3_correct': False, 'p4p3_attempts': 0,
                 'p4p4_answer': '', 'p4p4_feedback': None, 'p4p4_correct': False, 'p4p4_attempts': 0,
-                'show_cumulative_popup5': False, 'show_cumulative_popup7': False,
+                'page2_show_cumulative_popup5': False, 'page2_show_cumulative_popup7': False,
              })
         elif user_type == "교사용":
              st.session_state['page'] = 'teacher_page'
