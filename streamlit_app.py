@@ -460,7 +460,7 @@ def student_page_2_graph60():
                 ]
         if 'graph_prev_values' not in st.session_state:
             st.session_state['graph_prev_values'] = (0, 0, 0, 0, 0)
-        result = tuple(draggable_barchart("graph_page_2", labels=["1회", "2회", "3회", "4회", "5회"]))
+        result = tuple(draggable_barchart("graph_page_2", labels=["1회", "2회", "3회", "4회", "5회"], hint=st.session_state.get('p2_graph_hint', False)))
         if result != st.session_state['graph_prev_values']:
             st.session_state['graph_prev_values'] = result
         # # HTML 파일 로드 및 표시 (components.html 사용)
@@ -483,6 +483,10 @@ def student_page_2_graph60():
         # 학생 응답 입력 (정답 맞추면 비활성화)
         is_input_disabled = st.session_state.get('p2p1_correct', False)
         student_answer = st.text_area("여기에 발견한 내용을 작성하세요:", height=150, key="p2p1_answer_input", value=st.session_state.get('p2p1_answer', ''), disabled=is_input_disabled) # height 추가하여 크기 확보
+
+        if st.session_state.get('p2p1_attempts', 0) >= 3:
+            if st.button("힌트 보기", key="btn_hint_p2p1"):
+                st.session_state['p2_graph_hint'] = True
 
         # 제출 버튼 (정답 맞추면 비활성화)
         if st.button("답변 제출", key="btn_submit_p2p1", disabled=is_input_disabled):

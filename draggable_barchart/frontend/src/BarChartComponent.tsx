@@ -73,7 +73,7 @@ function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: 
         boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
         borderRadius: '2px 2px 0 0',
       }} />
-      {targetAverage - value > 0 ?
+      {showHint && (targetAverage - value > 0 ?
         <div style={{
           position: 'absolute',
           width: '3rem',
@@ -84,7 +84,6 @@ function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: 
           borderRadius: '2px 2px 0 0',
         }} />
         :
-        
         <div style={{
           position: 'absolute',
           width: '3rem',
@@ -94,7 +93,7 @@ function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: 
           boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
           borderRadius: '2px 2px 0 0',
         }} />
-      }
+      )}
       <div style={{
         position: 'absolute',
         width: '3rem',
@@ -134,6 +133,7 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
       ? argVals
       : [60, 60, 60, 60, 60];
   });
+  const hint = (args.hint || false) as boolean;
 
   // 2) Resize frame when theme or values change
   useEffect(() => {
@@ -240,6 +240,7 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
           key={idx}
           value={val}
           targetAverage={targetAverage}
+          showHint={hint}
           label={args.labels ? args.labels[idx] : undefined}
           onValueChange={handleValueChange(idx)}
         />
