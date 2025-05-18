@@ -453,9 +453,7 @@ def student_page_2_graph60():
 
     # 그래프 컬럼에 그래프 배치
     with graph_col:
-        if 'graph_trial' not in st.session_state:
-            st.session_state['graph_trial'] = 0
-        elif st.session_state['graph_trial'] > 2:
+        if st.session_state.get('page2_show_cumulative_popup7', False):
             if len(st.session_state.get('chat_log', [])) == 0:
                 st.session_state['chat_log'] = [
                     {"role": "assistant", "content": "그래프를 조정하는 데 어려움을 겪고 있는 것 같아요. 그래프의 높낮이를 조절하면서 어떤 변화가 있는지 살펴보세요."},
@@ -464,7 +462,6 @@ def student_page_2_graph60():
             st.session_state['graph_prev_values'] = (0, 0, 0, 0, 0)
         result = tuple(draggable_barchart("graph_page_2", labels=["1회", "2회", "3회", "4회", "5회"]))
         if result != st.session_state['graph_prev_values']:
-            st.session_state['graph_trial'] += 1
             st.session_state['graph_prev_values'] = result
         # # HTML 파일 로드 및 표시 (components.html 사용)
         # # Page 2 그래프는 값 전달 기능 필요 없음. 간단히 표시만. key는 필수 인자가 아닙니다.
