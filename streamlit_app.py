@@ -439,7 +439,7 @@ def student_page_2_graph60():
         elif st.session_state['graph_trial'] > 2:
             if len(st.session_state.get('chat_log', [])) == 0:
                 st.session_state['chat_log'] = [
-                    {"role": "assistant", "content": "그래프를 조정하는 데 어려움을 겪고 있는 것 같아요. 그래프의 높낮이를 조절하면서 어떤 변화가 있는지 살펴보세요."},
+                    {"role": "assistant", "content": "그래프를 조정하는 데 어려움을 겪고 있는 것 같아요. 그래프의 높낮이를 조절하면서 어떤 변화가 있는지 살펴보고, 도움이 필요한 부분이 있다면 질문해주세요."},
                 ]
         if 'graph_prev_values' not in st.session_state:
             st.session_state['graph_prev_values'] = (0, 0, 0, 0, 0)
