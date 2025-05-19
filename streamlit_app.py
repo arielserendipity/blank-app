@@ -2,6 +2,7 @@
 
 import streamlit as st
 from draggable_barchart import draggable_barchart
+from draggable_barchart2 import draggable_barchart2
 
 # --- 페이지 설정 (가장 먼저 호출) ---
 st.set_page_config(layout="wide") # 화면 너비를 최대한 사용하도록 설정
@@ -228,8 +229,10 @@ default_states = {
     'p4p4_attempts': 0,
 
     # 누적 오답 횟수 팝업 상태 (페이지 2, 4 공통)
-    'show_cumulative_popup5': False,
-    'show_cumulative_popup7': False,
+    'page2_show_cumulative_popup5': False,
+    'page2_show_cumulative_popup7': False,
+    'page4_show_cumulative_popup5': False,
+    'page4_show_cumulative_popup7': False,
 
     # 비활동 감지 타이머
     'last_interaction_time': time.time(),
@@ -257,8 +260,10 @@ def update_page_state_on_entry():
     if current_page != prev_page:
         # --- 페이지 이동 시 공통 초기화 ---
         # 누적 오답 팝업 상태 초기화 (페이지 이동 시 사라져야 함)
-        st.session_state['show_cumulative_popup5'] = False
-        st.session_state['show_cumulative_popup7'] = False
+        st.session_state['page2_show_cumulative_popup5'] = False
+        st.session_state['page2_show_cumulative_popup7'] = False
+        st.session_state['page4_show_cumulative_popup5'] = False
+        st.session_state['page4_show_cumulative_popup7'] = False
         # 문제별 피드백 메시지 초기화 (페이지 이동 시 사라져야 함)
         st.session_state['p2p1_feedback'] = None
         st.session_state['p4p1_feedback'] = None
@@ -328,15 +333,18 @@ def setup_columns_and_display_popups(current_page):
     main_col = None # Page 3용 메인 컬럼 초기화
 
     # 누적 오답 계산 및 팝업 상태 업데이트 (레이아웃 설정 전에 수행)
-    cumulative_attempts = st.session_state.get('p2p1_attempts', 0) + \
-                          st.session_state.get('p4p1_attempts', 0) + \
+    cumulative_attempts2 = st.session_state.get('p2p1_attempts', 0)
+    cumulative_attempts4 = st.session_state.get('p4p1_attempts', 0) + \
                           st.session_state.get('p4p2_attempts', 0) + \
                           st.session_state.get('p4p3_attempts', 0) + \
                           st.session_state.get('p4p4_attempts', 0)
 
     # 누적 오답 상태 업데이트
-    st.session_state['show_cumulative_popup5'] = (cumulative_attempts >= 5)
-    st.session_state['show_cumulative_popup7'] = (cumulative_attempts >= 7)
+    st.session_state['page2_show_cumulative_popup5'] = (cumulative_attempts2 >= 5)
+    st.session_state['page2_show_cumulative_popup7'] = (cumulative_attempts2 >= 7)
+
+    st.session_state['page4_show_cumulative_popup5'] = (cumulative_attempts4 >= 5)
+    st.session_state['page4_show_cumulative_popup7'] = (cumulative_attempts4 >= 7)
 
 
     # 3컬럼 레이아웃이 필요한 페이지 (그래프 | 과제 | 팝업)
@@ -354,10 +362,16 @@ def setup_columns_and_display_popups(current_page):
                  st.info('고민하고 있는건가요? 그래프의 높낮이를 움직이면서 어떤 변화가 있는지 살펴보세요.', icon="💡")
 
             # 누적 오답 팝업 메시지 표시
-            if st.session_state.get('show_cumulative_popup7', False):
-                 st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
-            elif st.session_state.get('show_cumulative_popup5', False):
-                 st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
+            if st.session_state.get('page', 'main') == 'student_page_2_graph60':
+                if st.session_state.get('page2_show_cumulative_popup7', False):
+                    st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
+                elif st.session_state.get('page2_show_cumulative_popup5', False):
+                    st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
+            elif st.session_state.get('page', 'main') == 'student_page_4_myavg_tasks':
+                if st.session_state.get('page4_show_cumulative_popup7', False):
+                    st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
+                elif st.session_state.get('page4_show_cumulative_popup5', False):
+                    st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
 
          # 그래프 컬럼, 과제 컬럼, 팝업 컬럼을 반환
          return graph_col, task_col, popup_col
@@ -373,10 +387,16 @@ def setup_columns_and_display_popups(current_page):
                  st.info('고민하고 있는건가요? 그래프의 높낮이를 움직이면서 어떤 변화가 있는지 살펴보세요.', icon="💡")
 
             # 누적 오답 팝업 (Page 3에서도 Page 2/4의 누적 오답을 표시)
-            if st.session_state.get('show_cumulative_popup7', False):
-                 st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
-            elif st.session_state.get('show_cumulative_popup5', False):
-                 st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
+            if st.session_state.get('page', 'main') == 'student_page_2_graph60':
+                if st.session_state.get('page2_show_cumulative_popup7', False):
+                    st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
+                elif st.session_state.get('page2_show_cumulative_popup5', False):
+                    st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
+            elif st.session_state.get('page', 'main') == 'student_page_4_myavg_tasks':
+                if st.session_state.get('page4_show_cumulative_popup7', False):
+                    st.warning(CUMULATIVE_FEEDBACK_7, icon="🚨")
+                elif st.session_state.get('page4_show_cumulative_popup5', False):
+                    st.warning(CUMULATIVE_FEEDBACK_5, icon="⚠️")
 
          # Page 3에서는 메인 콘텐츠 컬럼과 팝업 컬럼을 반환 (그래프 컬럼 없음)
          return main_col, None, popup_col # 메인 컬럼, 그래프 컬럼(None), 팝업 컬럼 반환
@@ -434,18 +454,15 @@ def student_page_2_graph60():
 
     # 그래프 컬럼에 그래프 배치
     with graph_col:
-        if 'graph_trial' not in st.session_state:
-            st.session_state['graph_trial'] = 0
-        elif st.session_state['graph_trial'] > 2:
+        if st.session_state.get('page2_show_cumulative_popup7', False):
             if len(st.session_state.get('chat_log', [])) == 0:
                 st.session_state['chat_log'] = [
                     {"role": "assistant", "content": "그래프를 조정하는 데 어려움을 겪고 있는 것 같아요. 그래프의 높낮이를 조절하면서 어떤 변화가 있는지 살펴보고, 도움이 필요한 부분이 있다면 질문해주세요."},
                 ]
         if 'graph_prev_values' not in st.session_state:
             st.session_state['graph_prev_values'] = (0, 0, 0, 0, 0)
-        result = tuple(draggable_barchart("graph_page_2", labels=["1회", "2회", "3회", "4회", "5회"]))
+        result = tuple(draggable_barchart("graph_page_2", labels=["1회", "2회", "3회", "4회", "5회"], hint=st.session_state.get('p2_graph_hint', False)))
         if result != st.session_state['graph_prev_values']:
-            st.session_state['graph_trial'] += 1
             st.session_state['graph_prev_values'] = result
         # # HTML 파일 로드 및 표시 (components.html 사용)
         # # Page 2 그래프는 값 전달 기능 필요 없음. 간단히 표시만. key는 필수 인자가 아닙니다.
@@ -467,6 +484,10 @@ def student_page_2_graph60():
         # 학생 응답 입력 (정답 맞추면 비활성화)
         is_input_disabled = st.session_state.get('p2p1_correct', False)
         student_answer = st.text_area("여기에 발견한 내용을 작성하세요:", height=150, key="p2p1_answer_input", value=st.session_state.get('p2p1_answer', ''), disabled=is_input_disabled) # height 추가하여 크기 확보
+
+        if st.session_state.get('p2p1_attempts', 0) >= 3:
+            if st.button("힌트 보기", key="btn_hint_p2p1"):
+                st.session_state['p2_graph_hint'] = True
 
         # 제출 버튼 (정답 맞추면 비활성화)
         if st.button("답변 제출", key="btn_submit_p2p1", disabled=is_input_disabled):
@@ -618,22 +639,12 @@ def student_page_4_myavg_tasks():
 
     # 그래프 컬럼에 그래프 배치
     with graph_col:
-        # 과제 2-1, 2-2에 필요한 그래프 표시
-        # 이 그래프는 HTML/JS에서 조작되지만, components.html은 값을 파이썬으로 직접 반환하지 않습니다.
-        # 따라서 아래 문제들의 "제출" 버튼 로직은 현재 HTML로부터 값을 받을 수 없습니다.
-        st.info("**참고:** 그래프를 조작할 수 있지만, 조작된 막대 값은 현재 앱으로 전달되지 않아 제출 시 평가되지 않습니다. 이 기능은 사용자 지정 컴포넌트로 구현해야 합니다.")
-        try:
-            with open("graph_page_3.html", "r", encoding="utf-8") as f: html_template = f.read()
-            # 자바스크립트에 목표 평균 값 전달 (스크립트 주입 방식은 작동)
-            js_injection = f"""<script>window.pythonTargetAverage = {target_avg}; console.log("Python Target Average:", window.pythonTargetAverage);</script>"""
-            html_graph_modified = html_template.replace("</head>", f"{js_injection}</head>", 1)
-            if "</head>" not in html_template: html_graph_modified = html_template.replace("</body>", f"{js_injection}</body>", 1)
-            # 'key' 인자 제거 (오류 해결), 할당문 제거
-            components.html(html_graph_modified, height=500)
-        except FileNotFoundError:
-            st.error("오류: graph_page_3.html 파일을 찾을 수 없습니다.")
-        except Exception as e:
-            st.error(f"HTML 처리 중 오류 발생: {e}")
+        # draggable_barchart처럼 draggable_barchart2를 사용하여 그래프를 표시할 수 있습니다.
+        result = tuple(draggable_barchart2("graph_page_4", labels=["1회", "2회", "3회", "4회", "5회"]))
+
+        # st.write("현재 그래프의 값:", result) # 현재 그래프 값 표시 (디버깅용)
+        st.session_state['graph2_average'] = sum(result) / len(result) # 그래프 평균 계산
+
 
     # 과제 컬럼에 과제 UI 배치
     with task_col:
@@ -641,15 +652,23 @@ def student_page_4_myavg_tasks():
 
         if current_problem_index == 1:
             st.subheader("과제 2-1")
-            st.write(f"목표 평균 {target_avg}점을 달성하기 위해 그래프 자료값을 변경해볼까요? 위에 표시된 그래프의 막대들을 조절해서 평균을 **{target_avg}**점으로 만들어보세요. (값 평가는 현재 작동하지 않습니다.)")
+            st.write(f"목표 평균 {target_avg}점을 달성하기 위해 그래프 자료값을 변경해볼까요? 위에 표시된 그래프의 막대들을 조절해서 평균을 **{target_avg}**점으로 만들어보세요.")
 
-            # 제출 버튼 (값 평가 기능 없음)
-            if st.button("제출 (값 평가 기능 없음)", key="btn_submit_p4p1"):
+            # 제출 버튼
+            if st.button("제출", key="btn_submit_p4p1"):
                  # save_student_data(st.session_state['student_name'], 4, f"과제2-1 제출 (값 평가 안됨)") # 데이터 저장
                  st.session_state['p4p1_attempts'] += 1 # 시도 횟수만 증가
-                 # 값 평가는 현재 불가하므로, 제출 즉시 다음 문제로 넘어가도록 처리 (요구사항과 다름, 임시 방편)
-                 st.session_state['p4p1_correct'] = True # 다음 문제로 넘어가기 위해 강제 True
-                 st.session_state['p4p1_feedback'] = "그래프 값 평가는 현재 작동하지 않습니다. 다음 문제로 이동합니다."
+
+                #  # 값 평가는 현재 불가하므로, 제출 즉시 다음 문제로 넘어가도록 처리 (요구사항과 다름, 임시 방편)
+                #  st.session_state['p4p1_correct'] = True # 다음 문제로 넘어가기 위해 강제 True
+                #  st.session_state['p4p1_feedback'] = "그래프 값 평가는 현재 작동하지 않습니다. 다음 문제로 이동합니다."
+
+                 # 값 평가 로직
+                 st.session_state['p4p1_answer'] = st.session_state.get('graph2_average', 0) == 5 # 현재 그래프 평균과 목표 평균 비교
+                 st.session_state['p4p1_correct'] = st.session_state['p4p1_answer'] # 정답 여부 저장
+                 st.session_state['p4p1_feedback'] = "그래프 평균이 목표 평균과 일치합니다." if st.session_state['p4p1_answer'] else "그래프 평균이 목표 평균과 일치하지 않습니다. 다시 시도해보세요."
+                 if st.session_state['p4p1_answer']:
+                     st.session_state['p4p1_result'] = result # 정답일 경우 그래프 값 저장 (다음 문제에서 사용)
                  st.rerun()
 
             # 피드백 표시 (임시 메시지)
@@ -662,25 +681,31 @@ def student_page_4_myavg_tasks():
 
 
             # 다음 문제 이동 버튼 (과제 1 정답 조건 삭제: 제출 버튼 누르면 무조건 활성화)
-            if st.button("다음 문제로 이동", key="btn_next_p4p1_actual"): # 실제 이동 버튼
-                 st.session_state['page4_problem_index'] = 2 # 문제 번호 증가
-                 # 다음 문제 상태 초기화 (page_state_on_entry에서 처리)
-                 st.rerun()
-            # else: # 제출하지 않으면 안내 (필요시 활성화)
-            #      st.info("'제출' 버튼을 눌러야 다음 문제로 넘어갈 수 있습니다. (값 평가는 현재 작동하지 않습니다)")
+            if st.session_state.get('p4p1_correct', False):
+                if st.button("다음 문제로 이동", key="btn_next_p4p1_actual"): # 실제 이동 버튼
+                    st.session_state['page4_problem_index'] = 2 # 문제 번호 증가
+                    # 다음 문제 상태 초기화 (page_state_on_entry에서 처리)
+                    st.rerun()
+                # else: # 제출하지 않으면 안내 (필요시 활성화)
+                #      st.info("'제출' 버튼을 눌러야 다음 문제로 넘어갈 수 있습니다. (값 평가는 현재 작동하지 않습니다)")
 
 
         elif current_problem_index == 2:
              st.subheader("과제 2-2")
-             st.write(f"앞에서 제출한 자료값과 **다른 자료값들**로 이루어진 그래프를 만들어 평균 {target_avg}점을 달성해볼까요? (값 평가는 현재 작동하지 않습니다.)")
+             st.write(f"앞에서 제출한 자료값과 **다른 자료값들**로 이루어진 그래프를 만들어 평균 {target_avg}점을 달성해볼까요?")
 
-             # 제출 버튼 (값 평가 기능 없음)
-             if st.button("제출 (값 평가 기능 없음)", key="btn_submit_p4p2"):
-                  # save_student_data(st.session_state['student_name'], 4, f"과제2-2 제출 (값 평가 안됨)") # 데이터 저장
-                  st.session_state['p4p2_attempts'] += 1 # 시도 횟수만 증가
-                  # 값 평가는 현재 불가하므로, 제출 즉시 다음 문제로 넘어가도록 처리 (요구사항과 다름, 임시 방편)
-                  st.session_state['p4p2_correct'] = True # 다음 문제로 넘어가기 위해 강제 True
-                  st.session_state['p4p2_feedback'] = "그래프 값 평가는 현재 작동하지 않습니다. 다음 문제로 이동합니다."
+             # 제출 버튼
+             if st.button("제출", key="btn_submit_p4p2"):
+                  # save_student_data(st.session_state['student_name'], 4, f"과제2-2 제출") # 데이터 저장
+                  st.session_state['p4p2_attempts'] += 1
+                  st.session_state['p4p2_answer'] = st.session_state.get('graph2_average', 0) == 5 # 현재 그래프 평균과 목표 평균 비교
+                  st.session_state['p4p2_correct'] = st.session_state['p4p2_answer'] and (st.session_state.get('p4p1_result', None) != result) # 정답 여부 저장 (과제 2-2는 과제 2-1과 다른 그래프여야 함)
+                  if st.session_state['p4p2_answer'] and (st.session_state.get('p4p1_result', None) != result):
+                     st.session_state['p4p2_feedback'] = "그래프 평균이 목표 평균과 일치합니다."
+                  elif st.session_state['p4p2_answer']:
+                     st.session_state['p4p2_feedback'] = "그래프 평균이 목표 평균과 일치합니다. 하지만 과제 2-1과 동일한 그래프입니다. 다른 그래프를 제출해주세요."
+                  else:
+                     st.session_state['p4p2_feedback'] = "그래프 평균이 목표 평균과 일치하지 않습니다. 다시 시도해보세요."
                   st.rerun()
 
              # 피드백 표시 (임시 메시지)
@@ -692,13 +717,14 @@ def student_page_4_myavg_tasks():
                   st.info(f"현재 과제 2-2 시도 횟수: {st.session_state.get('p4p2_attempts', 0)}회")
 
 
-             # 다음 문제 이동 버튼 (과제 2 정답 조건 삭제: 제출 버튼 누르면 무조건 활성화)
-             if st.button("다음 문제로 이동", key="btn_next_p4p2_actual"): # 실제 이동 버튼
-                   st.session_state['page4_problem_index'] = 3 # 문제 번호 증가
-                   # 다음 문제 상태 초기화 (page_state_on_entry에서 처리)
-                   st.rerun()
-             # else: # 제출하지 않으면 안내 (필요시 활성화)
-             #       st.info("'제출' 버튼을 눌러야 다음 문제로 넘어갈 수 있습니다. (값 평가는 현재 작동하지 않습니다)")
+             # 다음 문제 이동 버튼
+             if st.session_state.get('p4p2_correct', False):
+                if st.button("다음 문제로 이동", key="btn_next_p4p2_actual"): # 실제 이동 버튼
+                    st.session_state['page4_problem_index'] = 3 # 문제 번호 증가
+                    # 다음 문제 상태 초기화 (page_state_on_entry에서 처리)
+                    st.rerun()
+                # else: # 제출하지 않으면 안내 (필요시 활성화)
+                #       st.info("'제출' 버튼을 눌러야 다음 문제로 넘어갈 수 있습니다. (값 평가는 현재 작동하지 않습니다)")
 
 
         elif current_problem_index == 3:
@@ -888,7 +914,7 @@ def main_page():
                 'p4p2_correct': False, 'p4p2_attempts': 0, 'p4p2_feedback': None,
                 'p4p3_answer': '', 'p4p3_feedback': None, 'p4p3_correct': False, 'p4p3_attempts': 0,
                 'p4p4_answer': '', 'p4p4_feedback': None, 'p4p4_correct': False, 'p4p4_attempts': 0,
-                'show_cumulative_popup5': False, 'show_cumulative_popup7': False,
+                'page2_show_cumulative_popup5': False, 'page2_show_cumulative_popup7': False,
              })
         elif user_type == "교사용":
              st.session_state['page'] = 'teacher_page'

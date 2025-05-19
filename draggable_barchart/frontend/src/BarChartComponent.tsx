@@ -17,7 +17,7 @@ function debounce<T extends (...args: any[]) => void>(func: T, wait = 2000): T {
 // Debounced version of Streamlit.setComponentValue with 2s delay
 const debouncedSetComponentValue = debounce(Streamlit.setComponentValue, 2000);
 
-function Bar({ value, onValueChange, targetAverage, label }: { value: number; onValueChange: (value: number) => void; targetAverage: number; label?: string }) {
+function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: number; onValueChange: (value: number) => void; targetAverage: number; label?: string; showHint?: boolean }) {
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
@@ -73,15 +73,27 @@ function Bar({ value, onValueChange, targetAverage, label }: { value: number; on
         boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
         borderRadius: '2px 2px 0 0',
       }} />
-      <div style={{
-        position: 'absolute',
-        width: '3rem',
-        height: `${targetAverage - value}%`,
-        bottom: `${value}%`,
-        backgroundColor: (targetAverage - value>0)?'#95ef51':'#9551ef',
-        boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
-        borderRadius: '2px 2px 0 0',
-      }} />
+      {showHint && (targetAverage - value > 0 ?
+        <div style={{
+          position: 'absolute',
+          width: '3rem',
+          height: `${targetAverage - value}%`,
+          bottom: `${value}%`,
+          backgroundColor: (targetAverage - value>0)?'#95ef51':'#9551ef',
+          boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
+          borderRadius: '2px 2px 0 0',
+        }} />
+        :
+        <div style={{
+          position: 'absolute',
+          width: '3rem',
+          height: `${value - targetAverage}%`,
+          bottom: `${targetAverage}%`,
+          backgroundColor: (targetAverage - value>0)?'#95ef51':'#9551ef',
+          boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
+          borderRadius: '2px 2px 0 0',
+        }} />
+      )}
       <div style={{
         position: 'absolute',
         width: '3rem',
@@ -121,6 +133,7 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
       ? argVals
       : [60, 60, 60, 60, 60];
   });
+  const hint = (args.hint || false) as boolean;
 
   // 2) Resize frame when theme or values change
   useEffect(() => {
@@ -172,6 +185,7 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
       boxShadow: `inset 0 -10px 10px -10px rgba(128, 128, 128, 0.2), inset 0 10px 10px -10px rgba(128, 128, 128, 0.1)`,
       paddingTop: "1.5rem",
       paddingBottom: "3.5rem",
+      userSelect: "none",
     }}>
       <div style={{
         position: "relative",
@@ -226,6 +240,7 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
           key={idx}
           value={val}
           targetAverage={targetAverage}
+          showHint={hint}
           label={args.labels ? args.labels[idx] : undefined}
           onValueChange={handleValueChange(idx)}
         />
