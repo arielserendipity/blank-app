@@ -8,6 +8,8 @@ import pandas as pd
 from datetime import datetime
 from openai import OpenAI
 
+from streamlit_extras.stylable_container import stylable_container
+
 # --- 상수 및 환경설정 ---
 TEACHER_PASSWORD = "2025"
 STUDENT_DATA_DIR = "student_data"
@@ -94,6 +96,11 @@ with st.sidebar:
     if teacher_nav:
         st.session_state['page'] = 'teacher_page'
         st.rerun()
+
+st.markdown(
+    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>',
+    unsafe_allow_html=True,
+)
 
 # --- 데이터 저장 ---
 def save_student_data(student_name, page, problem, student_answer, is_correct, attempt, feedback_history, cumulative_popup_shown, chatbot_interactions):
@@ -326,6 +333,22 @@ def student_page_2_graph60():
                 response = client.chat.completions.create(model="gpt-4.1",messages=chatLog)
                 st.session_state['chat_log_page2'].append({"role": "assistant", "content": response.choices[0].message.content})
                 st.rerun()
+        
+
+        with stylable_container(
+            key="container_with_border",
+            css_styles=r"""
+                button {
+                    border: none;
+                    font-family: 'Font Awesome 5 Free';
+                    content: '\f1c1';
+                }
+                """,
+        ):
+            if st.button("\u279C"):
+                st.session_state['page'] = 'student_page_3_myavg_setup'
+                st.rerun()
+
         if st.session_state.get('p2p1_correct', False):
             if st.button("다음(나만의 평균 설정)", key="btn_next_p2"):
                 st.session_state['page'] = 'student_page_3_myavg_setup'
@@ -369,7 +392,7 @@ def student_page_4_myavg_tasks():
     st.write(f"{st.session_state.get('student_name', '학생')} 학생, 설정한 목표 평균 **{target_avg}**점을 달성하기 위한 과제들을 해결해봅시다.")
     graph_col, task_col, popup_col = setup_columns_and_display_popups('student_page_4_myavg_tasks')
     with graph_col:
-        result = tuple(draggable_barchart2("graph_page_4", labels=["1회", "2회", "3회", "4회", "5회"]))
+        result = tuple(draggable_barchart2("graph_page_4", labels=["1회", "2회", "3회", "4회", "5회"], hint=st.session_state.get('p4_graph_hint', False), target_avg=target_avg))
         st.session_state['graph2_average'] = sum(result) / len(result)
     with task_col:
         # 과제 2-1
@@ -488,6 +511,9 @@ def student_page_4_myavg_tasks():
             is_input_disabled = st.session_state.get('p4p3_correct', False)
             student_answer = st.text_area("여기에 전략을 작성하세요:", height=150, key="p4p3_answer_input", value=st.session_state.get('p4p3_answer', ''), disabled=is_input_disabled)
             attempts = st.session_state.get('p4p3_attempts', 0)
+            if st.session_state['p4p3_attempts'] >= 3:
+                if st.button("힌트 보기", key="btn_hint_p4p3"):
+                    st.session_state['p4_graph_hint'] = True
             if st.button("답변 제출", key="btn_submit_p4p3", disabled=is_input_disabled):
                 st.session_state['p4p3_answer'] = student_answer
                 st.session_state['p4p3_attempts'] += 1
@@ -533,6 +559,7 @@ def student_page_4_myavg_tasks():
                     response = client.chat.completions.create(model="gpt-4.1",messages=st.session_state['chat_log_page4_p3'])
                     st.session_state['chat_log_page4_p3'].append({"role": "assistant", "content": response.choices[0].message.content})
                     st.rerun()
+                    
             if st.session_state.get('p4p3_correct', False):
                 if st.button("다음", key="btn_next_p4p3"):
                     st.session_state['page4_problem_index'] = 4
@@ -542,6 +569,20 @@ def student_page_4_myavg_tasks():
             if st.button("뒤로 가기", key="back_p4_3"):
                 st.session_state['page4_problem_index'] = 2
                 st.rerun()
+            with stylable_container(
+                key="container_with_border",
+                css_styles=r"""
+                    button {
+                        border: none;
+                        font-family: 'Font Awesome 5 Free';
+                        content: '\f1c1';
+                    }
+                    """,
+            ):
+                if st.button("\u279C"):
+                    st.session_state['page4_problem_index'] = 4
+                    st.rerun()
+
                 
         elif current_problem_index == 4:
             st.subheader("과제 2-4")
@@ -594,6 +635,20 @@ def student_page_4_myavg_tasks():
             if st.button("뒤로 가기", key="back_p4_4"):
                 st.session_state['page4_problem_index'] = 3
                 st.rerun()
+            with stylable_container(
+                key="container_with_border",
+                css_styles=r"""
+                    button {
+                        border: none;
+                        font-family: 'Font Awesome 5 Free';
+                        content: '\f1c1';
+                    }
+                    """,
+            ):
+                if st.button("\u279C"):
+                    st.session_state['page'] = 'student_page_5_completion'
+                    st.rerun()
+
 
 # --- 학생 페이지 5 (학습완료) ---
 def student_page_5_completion():

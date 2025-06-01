@@ -13,6 +13,6 @@ else:
     _component_func = components.declare_component("draggable_barchart", path=build_dir)
 
 
-def draggable_barchart2(name, key=None, labels=None, hint=False):
-    component_value = _component_func(name=name, key=key, labels=labels, hint=hint, default=[60, 60, 60, 60, 60])
+def draggable_barchart2(name, key=None, labels=None, hint=False, target_avg=5):
+    component_value = _component_func(name=name, key=key, labels=labels, hint=hint, default=[60, 60, 60, 60, 60], target_avg=target_avg)
     return component_value

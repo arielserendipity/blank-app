@@ -79,7 +79,7 @@ function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: 
           width: '3rem',
           height: `${targetAverage - value * 10}%`,
           bottom: `${value * 10}%`,
-          backgroundColor: (targetAverage - value * 10>0)?'#95ef51':'#9551ef',
+          backgroundColor: '#95ef51',
           boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
           borderRadius: '2px 2px 0 0',
         }} />
@@ -89,7 +89,7 @@ function Bar({ value, onValueChange, targetAverage, label, showHint }: { value: 
           width: '3rem',
           height: `${value * 10 - targetAverage}%`,
           bottom: `${targetAverage}%`,
-          backgroundColor: (targetAverage - value * 10>0)?'#95ef51':'#9551ef',
+          backgroundColor: '#e5a1ef',
           boxShadow: `0 0 10px rgba(128, 128, 128, 0.3)`,
           borderRadius: '2px 2px 0 0',
         }} />
@@ -134,13 +134,14 @@ function BarChartComponent({ args, disabled, theme }: ComponentProps): ReactElem
       : [6, 6, 6, 6, 6];
   });
   const hint = (args.hint || false) as boolean;
+  const target_avg = (args.target_avg || 6) as number;
 
   // 2) Resize frame when theme or values change
   useEffect(() => {
     Streamlit.setFrameHeight();
   }, [theme, values]);
 
-  const targetAverage = 60;
+  const targetAverage = target_avg * 10;
 
   // 3) Handler to update a single bar and send back to Streamlit
   const handleValueChange = (index: number) => (newValue: number) => {
