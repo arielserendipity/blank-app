@@ -786,5 +786,63 @@
         ],
         "cumulative_popup_shown": [],
         "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 06:26:35",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            60,
+            60,
+            60,
+            60,
+            60
+        ],
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "오답이에요. 지금의 평균은 60.00입니다. 평균이 5가 되게 만들어주세요. 목표 평균을 바꾸고 싶다면 ‘뒤로 가기‘ 버튼을 눌러주세요."
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 06:26:37",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            6,
+            6,
+            6,
+            5,
+            2
+        ],
+        "is_correct": true,
+        "attempt": 2,
+        "feedback_history": [
+            "오답이에요. 지금의 평균은 60.00입니다. 평균이 5가 되게 만들어주세요. 목표 평균을 바꾸고 싶다면 ‘뒤로 가기‘ 버튼을 눌러주세요.",
+            "좋아요! 평균이 5.00로 잘 만들어주었어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 06:26:40",
+        "page": 4,
+        "problem": "2-2",
+        "student_answer": [
+            6,
+            6,
+            7,
+            4,
+            2
+        ],
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "좋아요! 학생이 만든 것처럼 자료값이 너무 높거나 너무 낮아도 평균 5을 가질 수 있어요."
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
     }
 ]
