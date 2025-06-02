@@ -844,5 +844,146 @@
         ],
         "cumulative_popup_shown": [],
         "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 15:01:19",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            60,
+            60,
+            60,
+            60,
+            60
+        ],
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "오답이에요. 지금의 평균은 60.00입니다. 평균이 5가 되게 만들어주세요. 목표 평균을 바꾸고 싶다면 ‘뒤로 가기‘ 버튼을 눌러주세요."
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 15:01:23",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            6,
+            6,
+            6,
+            6,
+            1
+        ],
+        "is_correct": true,
+        "attempt": 2,
+        "feedback_history": [
+            "오답이에요. 지금의 평균은 60.00입니다. 평균이 5가 되게 만들어주세요. 목표 평균을 바꾸고 싶다면 ‘뒤로 가기‘ 버튼을 눌러주세요.",
+            "좋아요! 평균이 5.00로 잘 만들어주었어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 15:01:26",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            6,
+            6,
+            6,
+            6,
+            1
+        ],
+        "is_correct": true,
+        "attempt": 3,
+        "feedback_history": [
+            "오답이에요. 지금의 평균은 60.00입니다. 평균이 5가 되게 만들어주세요. 목표 평균을 바꾸고 싶다면 ‘뒤로 가기‘ 버튼을 눌러주세요.",
+            "좋아요! 평균이 5.00로 잘 만들어주었어요!",
+            "좋아요! 평균이 5.00로 잘 만들어주었어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 15:01:29",
+        "page": 4,
+        "problem": "2-2",
+        "student_answer": [
+            6,
+            6,
+            6,
+            6,
+            1
+        ],
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "앞에서 제출한 자료값들과 같습니다. 다른 경우를 생각해보세요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 15:01:32",
+        "page": 4,
+        "problem": "2-2",
+        "student_answer": [
+            6,
+            6,
+            7,
+            5,
+            1
+        ],
+        "is_correct": true,
+        "attempt": 2,
+        "feedback_history": [
+            "앞에서 제출한 자료값들과 같습니다. 다른 경우를 생각해보세요!",
+            "좋아요! 학생이 만든 것처럼 자료값이 너무 높거나 너무 낮아도 평균 5을 가질 수 있어요."
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 15:06:25",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균은 모든 자룟값을 모두 더하고 자료의 개수로 나눈 것이에요! 답변이 비어있어요! 평균이 60이어도 여러 가지 자료 모양이 나올 수 있다는 걸 생각해볼 수 있도록 다시 한 번 설명해줄래요?"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 15:06:32",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "fr",
+        "is_correct": false,
+        "attempt": 2,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균은 모든 자룟값을 모두 더하고 자료의 개수로 나눈 것이에요! 답변이 비어있어요! 평균이 60이어도 여러 가지 자료 모양이 나올 수 있다는 걸 생각해볼 수 있도록 다시 한 번 설명해줄래요?",
+            "음... 다시 생각해볼까요? 각각의 그래프의 자료값이 얼마인지 알아볼까요? 아직 평균에 대한 생각을 충분히 적지 않은 것 같아요. 평균이 같아도 자료들이 어떻게 다를 수 있을지 한 번 더 생각해볼래요?"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-02 15:06:34",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "fr",
+        "is_correct": false,
+        "attempt": 3,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균은 모든 자룟값을 모두 더하고 자료의 개수로 나눈 것이에요! 답변이 비어있어요! 평균이 60이어도 여러 가지 자료 모양이 나올 수 있다는 걸 생각해볼 수 있도록 다시 한 번 설명해줄래요?",
+            "음... 다시 생각해볼까요? 각각의 그래프의 자료값이 얼마인지 알아볼까요? 아직 평균에 대한 생각을 충분히 적지 않은 것 같아요. 평균이 같아도 자료들이 어떻게 다를 수 있을지 한 번 더 생각해볼래요?",
+            "음... 다시 생각해볼까요? 그래프의 높낮이를 움직이면서 자료의 총합은 어떻게 변화하나요? '힌트 보기'를 사용해서 그래프가 어떻게 변화하는지 관찰하세요. 아직 설명이 부족해요. 평균이 60일 때, 자료들이 어떻게 다르게 생길 수 있는지 한 번 더 생각해서 말해볼래요?"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
     }
 ]
