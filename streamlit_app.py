@@ -269,7 +269,7 @@ def evaluate_page4_problem3_with_gpt(student_answer, goal_concept, graph_values,
         return False, "GPT 오류"
 
 
-def evaluate_page4_problem4_with_gpt(student_answer, graph_values):
+def evaluate_page4_problem4_with_gpt(student_answer, goal_concept, graph_values, target_average):
     formatted_values = {f"친구{i+1}": f"{v*1000}원" for i, v in enumerate(graph_values)}
     system_message = """당신은 학생이 평균 개념을 깊이 이해하도록 돕는 AI 튜터입니다. - 학생이 마지막으로 본 그래프: {formatted_values} (목표 평균: {target_average*1000}원)
 - 학생의 답변: "{student_answer}"
@@ -971,7 +971,13 @@ def student_page_4_myavg_tasks():
             if st.button("답변 제출", key="btn_submit_p4p4", disabled=is_input_disabled):
                 st.session_state['p4p4_answer'] = student_answer
                 st.session_state['p4p4_attempts'] += 1
-                _, gpt_comment = evaluate_page4_problem4_with_gpt(student_answer, result, target_avg)
+                gpt_result, gpt_comment = evaluate_page4_problem4_with_gpt(
+                    student_answer,
+                    PAGE4_PROBLEM3_GOAL_CONCEPT,
+                    result,
+                    target_avg
+                )
+            
                 is_correct = "평균" in student_answer 
                 if is_correct:
                     st.session_state['p4p4_correct'] = True

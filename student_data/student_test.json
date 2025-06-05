@@ -160,5 +160,279 @@
             4
         ],
         "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:09:23",
+        "page": 2,
+        "problem": "예제1-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:09:24",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "d",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:09:26",
+        "page": 2,
+        "problem": "예제2-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:09:28",
+        "page": 2,
+        "problem": "예제2-이유",
+        "student_answer": "d",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:09:29",
+        "page": 2,
+        "problem": "예제3-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:09:32",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "e",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:09:35",
+        "page": 2,
+        "problem": "예제4-답변",
+        "student_answer": "300",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:09:44",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            6,
+            6,
+            6,
+            1,
+            6
+        ],
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "좋아요! 평균이 5.00으로 잘 만들어주었어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:09:49",
+        "page": 4,
+        "problem": "2-2",
+        "student_answer": [
+            6,
+            3,
+            9,
+            1,
+            6
+        ],
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "좋아요! 학생이 만든 것처럼 자료의 값이 너무 높거나 너무 낮아도 평균 5을 가질 수 있어요."
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:11:42",
+        "page": 4,
+        "problem": "2-4",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 2,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균은 자료를 대표하는 값이에요. 평균이 항상 자료 중간에 있나요? 그래프에서 보여준 여러 숫자들을 보고 평균에 대해 생각해본 점이 멋져요! 그래프의 값들이 모두 비슷하지 않고, 어떤 값은 다른 값들보다 훨씬 크거나 작을 때 평균이 어디쯤 위치하는지 살펴본 적이 있나요? 어떤 경우에는 평균을 구해도 실제로 그래프에 나온 숫자들 중 '정확히 그 값'이 없을 수도 있어요. 이 부분을 직접 그래프를 다시 보면서 확인해보면 재미있을 거예요! 혹시 평균이 꼭 그래프에 있는 숫자 중 하나여야 한다고 생각했나요, 아니면 그래프에 없는 새로운 수가 될 수도 있다고 생각하나요? 이 점에 대해 더 이야기해볼까요?"
+        ],
+        "cumulative_popup_shown": [
+            "CUMULATIVE_FEEDBACK_4_4_P4P4"
+        ],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:12:08",
+        "page": 2,
+        "problem": "예제1-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:12:11",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "d",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:12:13",
+        "page": 2,
+        "problem": "예제2-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:12:15",
+        "page": 2,
+        "problem": "예제2-이유",
+        "student_answer": "d",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:12:17",
+        "page": 2,
+        "problem": "예제3-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:12:18",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "d",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:12:22",
+        "page": 2,
+        "problem": "예제4-답변",
+        "student_answer": "300",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:12:32",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            6,
+            6,
+            6,
+            6,
+            6
+        ],
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "좋아요! 평균이 6.00으로 잘 만들어주었어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:12:37",
+        "page": 4,
+        "problem": "2-2",
+        "student_answer": [
+            6,
+            9,
+            3,
+            6,
+            6
+        ],
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "좋아요! 학생이 만든 것처럼 자료의 값이 너무 높거나 너무 낮아도 평균 6을 가질 수 있어요."
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 21:12:49",
+        "page": 4,
+        "problem": "2-4",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 과제를 해결하면서 알게 된 사실을 생각해보세요!? 그래프에 나온 여러 숫자들을 보고 나서 평균에 대해 생각해보는 건 정말 흥미로운 일이에요! 각각의 숫자들은 다 다르지만, 평균은 이 모든 값을 하나의 숫자로 표현해주죠. 그런데 재미있는 점은, 평균으로 나타난 값이 실제 그래프에 있는 값들 중 딱 맞는 숫자가 아닐 수도 있다는 거예요. 예를 들어, 4명 친구의 점수가 80, 90, 100, 110이라면 평균은 95지만, 이 숫자는 실제 네 명의 점수에는 없죠.\n\n이런 점을 생각해볼 때, 평균이라는 값이 어떤 특별한 의미를 가지는지, 그리고 우리 주변의 다양한 데이터를 볼 때 평균이 어떤 역할을 할 수 있는지 한 번 더 생각해볼 수 있을 것 같아요. 그래프에 나온 각 숫자들과 평균을 비교하면서, 평균이 왜 꼭"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
     }
 ]
