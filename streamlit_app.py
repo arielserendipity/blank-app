@@ -85,6 +85,26 @@ for key, value in default_states.items():
     if key not in st.session_state:
         st.session_state[key] = value
 
+st.markdown(
+    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>',
+    unsafe_allow_html=True,
+)
+
+def skip_button():
+    with stylable_container(
+        key="container_with_border",
+        css_styles=r"""
+            button {
+                border: none;
+                background-color: transparent;
+            }
+            .skip-button {
+            margin-top: 10px;
+            }
+            """,
+    ):
+        return st.button("☎", key="skip_button")
+
 # --- 사이드바 메뉴 ---
 with st.sidebar:
     st.markdown("## 📊 평균 학습 메뉴")
@@ -96,11 +116,12 @@ with st.sidebar:
     if teacher_nav:
         st.session_state['page'] = 'teacher_page'
         st.rerun()
-
-st.markdown(
-    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>',
-    unsafe_allow_html=True,
-)
+    
+    if skip_button():
+        if st.session_state['skip']:
+            st.session_state[st.session_state['skip'][0]] = st.session_state['skip'][1]
+            del st.session_state['skip']
+        st.rerun()
 
 # --- 데이터 저장 ---
 def save_student_data(student_name, page, problem, student_answer, is_correct, attempt, feedback_history, cumulative_popup_shown, chatbot_interactions):
@@ -335,19 +356,7 @@ def student_page_2_graph60():
                 st.rerun()
         
 
-        with stylable_container(
-            key="container_with_border",
-            css_styles=r"""
-                button {
-                    border: none;
-                    font-family: 'Font Awesome 5 Free';
-                    content: '\f1c1';
-                }
-                """,
-        ):
-            if st.button("\u279C"):
-                st.session_state['page'] = 'student_page_3_myavg_setup'
-                st.rerun()
+        st.session_state['skip'] = ('page', 'student_page_3_myavg_setup')
 
         if st.session_state.get('p2p1_correct', False):
             if st.button("다음(나만의 평균 설정)", key="btn_next_p2"):
@@ -357,6 +366,8 @@ def student_page_2_graph60():
             st.info("정답을 맞춰야 다음 단계로 넘어갈 수 있습니다.")
     if st.button("뒤로 가기", key="back_student2"):
         st.session_state['page'] = 'student_page_1'
+        st.session_state['p2_graph_hint'] = False  # 뒤로 가면 힌트 초기화
+        st.session_state['p4_graph_hint'] = False  # 뒤로 가면 힌트 초기화
         st.rerun()
 
 # --- 학생 페이지 3 (나만의 평균 설정) ---
@@ -381,6 +392,8 @@ def student_page_3_myavg_setup():
             st.rerun()
     if st.button("뒤로 가기", key="back_student3"):
         st.session_state['page'] = 'student_page_2_graph60'
+        st.session_state['p2_graph_hint'] = False  # 뒤로 가면 힌트 초기화
+        st.session_state['p4_graph_hint'] = False  # 뒤로 가면 힌트 초기화
         st.rerun()
 
 # --- 학생 페이지 4 (나만의 평균 과제) ---
@@ -439,6 +452,8 @@ def student_page_4_myavg_tasks():
                     st.rerun()
             if st.button("뒤로 가기", key="back_p4_1"):
                 st.session_state['page'] = 'student_page_3_myavg_setup'
+                st.session_state['p2_graph_hint'] = False  # 뒤로 가면 힌트 초기화
+                st.session_state['p4_graph_hint'] = False  # 뒤로 가면 힌트 초기화
                 st.rerun()
 
         # 과제 2-2
@@ -503,6 +518,8 @@ def student_page_4_myavg_tasks():
                     st.rerun()
             if st.button("뒤로 가기", key="back_p4_2"):
                 st.session_state['page4_problem_index'] = 1
+                st.session_state['p2_graph_hint'] = False  # 뒤로 가면 힌트 초기화
+                st.session_state['p4_graph_hint'] = False  # 뒤로 가면 힌트 초기화
                 st.rerun()
 
         elif current_problem_index == 3:
@@ -568,20 +585,10 @@ def student_page_4_myavg_tasks():
                 st.info("정답을 맞춰야 다음 단계로 넘어갈 수 있습니다.")
             if st.button("뒤로 가기", key="back_p4_3"):
                 st.session_state['page4_problem_index'] = 2
+                st.session_state['p2_graph_hint'] = False  # 뒤로 가면 힌트 초기화
+                st.session_state['p4_graph_hint'] = False  # 뒤로 가면 힌트 초기화
                 st.rerun()
-            with stylable_container(
-                key="container_with_border",
-                css_styles=r"""
-                    button {
-                        border: none;
-                        font-family: 'Font Awesome 5 Free';
-                        content: '\f1c1';
-                    }
-                    """,
-            ):
-                if st.button("\u279C"):
-                    st.session_state['page4_problem_index'] = 4
-                    st.rerun()
+            st.session_state['skip'] = ('page4_problem_index', 4)
 
                 
         elif current_problem_index == 4:
@@ -634,20 +641,10 @@ def student_page_4_myavg_tasks():
                 st.info("정답을 맞춰야 다음 단계로 넘어갈 수 있습니다.")
             if st.button("뒤로 가기", key="back_p4_4"):
                 st.session_state['page4_problem_index'] = 3
+                st.session_state['p2_graph_hint'] = False  # 뒤로 가면 힌트 초기화
+                st.session_state['p4_graph_hint'] = False  # 뒤로 가면 힌트 초기화
                 st.rerun()
-            with stylable_container(
-                key="container_with_border",
-                css_styles=r"""
-                    button {
-                        border: none;
-                        font-family: 'Font Awesome 5 Free';
-                        content: '\f1c1';
-                    }
-                    """,
-            ):
-                if st.button("\u279C"):
-                    st.session_state['page'] = 'student_page_5_completion'
-                    st.rerun()
+            st.session_state['skip'] = ('page', 'student_page_5_completion')
 
 
 # --- 학생 페이지 5 (학습완료) ---
@@ -712,11 +709,15 @@ def teacher_page():
     elif password: st.error("비밀번호가 틀렸습니다.")
     if st.button("뒤로 가기", key="back_teacher"):
         st.session_state['page'] = 'main'
+        st.session_state['p2_graph_hint'] = False  # 뒤로 가면 힌트 초기화
+        st.session_state['p4_graph_hint'] = False  # 뒤로 가면 힌트 초기화
         st.rerun()
 
 # --- 메인 페이지 ---
 def main_page():
     st.title("📊 평균 학습 웹 앱")
+    st.session_state['p2_graph_hint'] = False  # 뒤로 가면 힌트 초기화
+    st.session_state['p4_graph_hint'] = False  # 뒤로 가면 힌트 초기화
     st.write("학생 또는 교사로 접속하여 평균 개념을 학습하거나 학습 현황을 확인해보세요.")
     user_type = st.radio("접속 유형 선택:", ("학생용", "교사용"), key="user_type_radio", horizontal=True)
     if st.button("선택 완료", key="btn_select_user_type"):
@@ -736,6 +737,9 @@ pages = {
     'student_page_5_completion': student_page_5_completion,
     'teacher_page': teacher_page,
 }
+
+st.session_state['skip'] = None
+
 update_page_state_on_entry()
 render_page = pages.get(st.session_state.get('page','main'), main_page)
 render_page()
