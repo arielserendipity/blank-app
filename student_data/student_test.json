@@ -1,0 +1,164 @@
+[
+    {
+        "timestamp": "2025-06-05 20:00:03",
+        "page": 2,
+        "problem": "예제1-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:10",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "0",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:14",
+        "page": 2,
+        "problem": "예제2-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:16",
+        "page": 2,
+        "problem": "예제2-이유",
+        "student_answer": "3",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:18",
+        "page": 2,
+        "problem": "예제3-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:20",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "3",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:23",
+        "page": 2,
+        "problem": "예제4-답변",
+        "student_answer": "300",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:28",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균은 모든 자룟값을 모두 더하고 자료의 개수로 나눈 것이에요! 답변이 비어있어요. 평균에 대해 느낀 점이나, 그래프를 보며 알게 된 점을 한 번 더 생각해서 적어볼래요?"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:31",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 2,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균은 모든 자룟값을 모두 더하고 자료의 개수로 나눈 것이에요! 답변이 비어있어요. 평균에 대해 느낀 점이나, 그래프를 보며 알게 된 점을 한 번 더 생각해서 적어볼래요?",
+            "음... 다시 생각해볼까요? 각 그래프 막대의 자료의 값이 얼마인지 알아볼까요? 답변이 비어있어요. 생각한 내용을 자유롭게 적어주면 더 잘 도와줄 수 있어요! 평균이 같은 자료들이 어떻게 다를 수 있을지 떠올려볼까요?"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:33",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 3,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균은 모든 자룟값을 모두 더하고 자료의 개수로 나눈 것이에요! 답변이 비어있어요. 평균에 대해 느낀 점이나, 그래프를 보며 알게 된 점을 한 번 더 생각해서 적어볼래요?",
+            "음... 다시 생각해볼까요? 각 그래프 막대의 자료의 값이 얼마인지 알아볼까요? 답변이 비어있어요. 생각한 내용을 자유롭게 적어주면 더 잘 도와줄 수 있어요! 평균이 같은 자료들이 어떻게 다를 수 있을지 떠올려볼까요?",
+            "음... 다시 생각해볼까요? 그래프의 높낮이를 움직이면서 자료의 총합은 어떻게 변화하나요? '힌트 보기'를 사용해서 그래프가 어떻게 변화하는지 관찰하세요. 답변이 비어있어서 확인할 수 없었어. 평균이 60이지만 자료가 다르게 생길 수 있다는 걸 생각해볼 수 있을까?"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:43",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 4,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균은 모든 자룟값을 모두 더하고 자료의 개수로 나눈 것이에요! 답변이 비어있어요. 평균에 대해 느낀 점이나, 그래프를 보며 알게 된 점을 한 번 더 생각해서 적어볼래요?",
+            "음... 다시 생각해볼까요? 각 그래프 막대의 자료의 값이 얼마인지 알아볼까요? 답변이 비어있어요. 생각한 내용을 자유롭게 적어주면 더 잘 도와줄 수 있어요! 평균이 같은 자료들이 어떻게 다를 수 있을지 떠올려볼까요?",
+            "음... 다시 생각해볼까요? 그래프의 높낮이를 움직이면서 자료의 총합은 어떻게 변화하나요? '힌트 보기'를 사용해서 그래프가 어떻게 변화하는지 관찰하세요. 답변이 비어있어서 확인할 수 없었어. 평균이 60이지만 자료가 다르게 생길 수 있다는 걸 생각해볼 수 있을까?",
+            "음... 다시 생각해볼까요? 그래프의 높낮이를 움직이면서 자료의 총합은 어떻게 변화하나요? '힌트 보기'를 사용해서 그래프가 어떻게 변화하는지 관찰하세요. 답변이 비어 있어요! 그래프를 보고 어떤 점을 알게 되었는지, 느낀 점을 한 문장으로 말해줄 수 있나요?"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-05 20:00:47",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 5,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균은 모든 자룟값을 모두 더하고 자료의 개수로 나눈 것이에요! 답변이 비어있어요. 평균에 대해 느낀 점이나, 그래프를 보며 알게 된 점을 한 번 더 생각해서 적어볼래요?",
+            "음... 다시 생각해볼까요? 각 그래프 막대의 자료의 값이 얼마인지 알아볼까요? 답변이 비어있어요. 생각한 내용을 자유롭게 적어주면 더 잘 도와줄 수 있어요! 평균이 같은 자료들이 어떻게 다를 수 있을지 떠올려볼까요?",
+            "음... 다시 생각해볼까요? 그래프의 높낮이를 움직이면서 자료의 총합은 어떻게 변화하나요? '힌트 보기'를 사용해서 그래프가 어떻게 변화하는지 관찰하세요. 답변이 비어있어서 확인할 수 없었어. 평균이 60이지만 자료가 다르게 생길 수 있다는 걸 생각해볼 수 있을까?",
+            "음... 다시 생각해볼까요? 그래프의 높낮이를 움직이면서 자료의 총합은 어떻게 변화하나요? '힌트 보기'를 사용해서 그래프가 어떻게 변화하는지 관찰하세요. 답변이 비어 있어요! 그래프를 보고 어떤 점을 알게 되었는지, 느낀 점을 한 문장으로 말해줄 수 있나요?",
+            "음... 다시 생각해볼까요? 그래프의 높낮이를 움직이면서 자료의 총합은 어떻게 변화하나요? '힌트 보기'를 사용해서 그래프가 어떻게 변화하는지 관찰하세요. 답변이 없어서 확인할 수 없어요. 평균이 60이어도 여러가지 자료 모양이 나올 수 있다는 점을 그림이나 예시로 다시 한 번 생각해볼래요?"
+        ],
+        "cumulative_popup_shown": [
+            4
+        ],
+        "chatbot_interactions": []
+    }
+]

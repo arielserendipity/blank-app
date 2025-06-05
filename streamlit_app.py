@@ -198,9 +198,21 @@ def setup_columns_and_display_popups(current_page):
         return None, None, None
 
 # --- GPT 평가 함수 ---
-def evaluate_page2_problem1_with_gpt(student_answer, goal_concept):
-    system_message = f"""당신은 학생이 평균 개념 학습을 돕는 AI 튜터입니다. 학생은 그래프 조작 후 "{goal_concept}" 개념과 관련하여 알게된 사실을 설명했습니다. 학생의 답변이 목표 개념을 달성했는지 평가해주세요. 구체적으로 목표가 무엇인지 언급하면 안됩니다. 학생이 자연스럽게 평균이 60이어도 다양한 자료 집합을 가질 수 있음을 알게해주도록 촉진해주는 발문을 해주세요. 
-평가 결과는 반드시 'CORRECT:' 또는 'INCORRECT:' 접두사로 시작해주세요. 그 뒤에 학생의 답변에 대한 짧고 격려하는 피드백을 추가해주세요. 피드백은 반드시 공백 포함 160자 이내로만 작성해주세요. 초등학생이 교육대상이므로 어렵거나 추상적인 표현 대신, 초등학생도 이해하기 쉬운 다정한 언어로 설명해주세요. 예를 들어, '평균선을 기준으로 높은 부분과 낮은 부분이 같아.', '보라색과 초록색의 넓이가 같아' 등의 응답도 학습 목표를 달성했다고 봅니다. """
+def evaluate_page2_problem1_with_gpt(student_answer, goal_concept, graph_values):
+    formatted_values = {f"{i+1}회": v for i, v in enumerate(graph_values)}
+    avg = sum(graph_values) / len(graph_values)
+    system_message = f"""당신은 학생이 평균 개념 학습을 돕고 있습니다. 학생은 그래프 조작 후 "{goal_concept}" 개념과 관련하여 알게된 사실을 설명했습니다. 
+    학생의 답변이 목표 개념을 달성했는지 평가해주세요. 구체적으로 목표가 무엇인지 언급하면 안됩니다. 
+    
+    - 학생이 만든 그래프 값: {formatted_values} (현재 평균: {avg:.1f})
+    - 학생의 답변: "{student_answer}"
+
+학생의 답변이 목표 개념을 달성했는지 평가해주세요. 평가 결과는 'CORRECT:' 또는 'INCORRECT:'로 시작해야 합니다.
+피드백을 제공할 때는 학생이 만든 구체적인 그래프 값({formatted_values})을 언급하며 설명해주세요.
+예를 들어, 학생이 "점수를 옮겼어요"라고만 답했다면 "네, 1회 시험의 높은 점수 일부를 3회 시험의 낮은 점수에 옮겨주어 평균을 맞출 수 있었군요!"와 같이 구체적으로 짚어주세요.
+피드백은 초등학생 눈높이에 맞춰 쉽고 다정한 언어로 이야기해주세요.
+학생이 자연스럽게 평균이 60이어도 다양한 자료 집합을 가질 수 있음을 알게해주도록 촉진해주는 발문을 해주세요. 
+평가 결과는 반드시 'CORRECT:' 또는 'INCORRECT:' 접두사로 시작해주세요. 그 뒤에 학생의 답변에 대한 짧고 격려하는 피드백을 추가해주세요. 피드백은 반드시 공백 포함 160자 이내로만 작성해주세요. 교육대상이 초등학생이므로 어렵거나 추상적인 표현 대신, 초등학생도 이해하기 쉬운 다정한 언어로 설명해주세요. 예를 들어, '평균선을 기준으로 높은 부분과 낮은 부분이 같아.', '보라색과 초록색의 넓이가 같아' 등의 응답도 학습 목표를 달성했다고 봅니다. """
     user_message = f"""학생의 답변: {student_answer}"""
     messages = [{"role":"system","content":system_message},{"role":"user","content":user_message}]
     try:
@@ -222,9 +234,16 @@ def evaluate_page2_problem1_with_gpt(student_answer, goal_concept):
         st.error(f"GPT API 오류: {e}")
         return False, "GPT 오류"
 
-def evaluate_page4_problem3_with_gpt(student_answer, goal_concept, scaffolding_prompt):
-    system_message = f"""당신은 학생이 평균 개념 학습을 돕는 AI 튜터입니다. 학생은 자신이 설정한 평균을 달성하기 위해 그래프를 조작하였고, 그에 따른 학생의 전략을 물어보는 과제입니다.  그래프 조작 후 "{PAGE4_PROBLEM3_GOAL_CONCEPT}" 개념과 관련하여 알게된 사실을 설명했습니다. 학생의 답변이 목표 개념을 달성했는지 평가해주세요. 구체적으로 목표가 무엇인지 언급하면 안됩니다. 학생이 자연스럽게 하나의 평균에도 다양한 자료 집합을 가질 수 있음을 알게해주도록 촉진해주는 발문을 해주세요. 
-평가 결과는 반드시 'CORRECT:' 또는 'INCORRECT:' 접두사로 시작해주세요. 그 뒤에 학생의 답변에 대한 짧고 격려하는 피드백을 추가해주세요. 피드백은 반드시 공백 포함 160자 이내로만 작성해주세요. 초등학생이 교육대상이므로 어렵거나 추상적인 표현 대신, 초등학생도 이해하기 쉬운 다정한 언어로 설명해주세요. 예를 들어, '평균선을 기준으로 높은 부분과 낮은 부분이 같아.', '자료의 값들을 다 더하면 평균*5야' 등의 응답도 학습 목표를 달성했다고 봅니다. """
+def evaluate_page4_problem3_with_gpt(student_answer, goal_concept, graph_values, target_average):
+    formatted_values = {f"친구{i+1}": f"{v*1000}원" for i, v in enumerate(graph_values)}
+    avg = sum(graph_values) / len(graph_values)
+    system_message = f"""당신은 학생이 평균 개념 학습을 돕는 AI 튜터입니다. 학생은 자신이 설정한 평균이 되는 자료의 값들을 만들었고, 그에 따른 학생의 전략을 물어보는 과제입니다.  그래프 조작 후 "{PAGE4_PROBLEM3_GOAL_CONCEPT}" 개념과 관련하여 알게된 사실을 설명했습니다. 학생의 답변이 목표 개념을 달성했는지 평가해주세요. 구체적으로 목표가 무엇인지 언급하면 안됩니다. 학생이 자연스럽게 하나의 평균에도 다양한 자료 집합을 가질 수 있음을 알게해주도록 촉진해주는 발문을 해주세요. 
+평가 결과는 반드시 'CORRECT:' 또는 'INCORRECT:' 접두사로 시작해주세요. 
+- 학생이 만든 용돈 분포: {formatted_values} (실제 평균: {avg*1000:.0f}원)
+- 학생이 설명한 자신의 전략: "{student_answer}"
+학생의 피드백에는 그가 만든 실제 데이터({formatted_values})를 근거로 들어 설명해주세요. 
+만약 학생이 '넘치는 값을 부족한 값에 줬어요'라고 설명했다면, "맞아요! 예를 들어 친구3의 용돈({formatted_values['친구3']})이 평균보다 많은데, 그 일부를 평균보다 용돈이 적은 친구1({formatted_values['친구1']})에게 나누어주는 전략을 사용했군요!"와 같이 구체적인 값으로 안내해주세요.
+그 뒤에 학생의 답변에 대한 짧고 격려하는 피드백을 추가해주세요. 피드백은 반드시 공백 포함 160자 이내로만 작성해주세요. 초등학생이 교육대상이므로 어렵거나 추상적인 표현 대신, 초등학생도 이해하기 쉬운 다정한 언어로 설명해주세요. 예를 들어, '평균선을 기준으로 높은 부분과 낮은 부분이 같아.', '자료의 값들을 다 더하면 평균*5야' 등의 응답도 학습 목표를 달성했다고 봅니다. """
     user_message = f"""학생의 답변: {student_answer}"""
     messages = [{"role":"system","content":system_message},{"role":"user","content":user_message}]
     try:
@@ -250,8 +269,14 @@ def evaluate_page4_problem3_with_gpt(student_answer, goal_concept, scaffolding_p
         return False, "GPT 오류"
 
 
-def evaluate_page4_problem4_with_gpt(student_answer):
-    system_message = """당신은 학생이 평균 개념을 깊이 이해하도록 돕는 AI 튜터입니다. 학생은 평균의 특징이나 '평균의 함정'에 대해 자신이 알게된 사실을 설명했습니다. 학생 답변 내용과 관련된 평균의 추가적인 특징이나 흥미로운 점에 대해 짧게 언급하며 탐구를 유도해주세요. 정답/오답 판단보다는 학생의 생각을 확장하는 데 집중해주세요. 학생에게 유도할 평균의 특징은 다음과 같습니다. 
+def evaluate_page4_problem4_with_gpt(student_answer, graph_values):
+    formatted_values = {f"친구{i+1}": f"{v*1000}원" for i, v in enumerate(graph_values)}
+    system_message = """당신은 학생이 평균 개념을 깊이 이해하도록 돕는 AI 튜터입니다. - 학생이 마지막으로 본 그래프: {formatted_values} (목표 평균: {target_average*1000}원)
+- 학생의 답변: "{student_answer}"
+
+정답/오답 판단 대신, 학생의 생각을 확장시키는 데 초점을 맞춰주세요.
+학생의 답변 내용과, 학생이 본 그래프 값({formatted_values})을 연결지어 흥미로운 점을 이야기하며 탐구를 유도해주세요.
+학생은 평균의 특징이나 '평균의 함정'에 대해 자신이 알게된 사실을 설명했습니다. 학생 답변 내용과 관련된 평균의 추가적인 특징이나 흥미로운 점에 대해 짧게 언급하며 탐구를 유도해주세요. 정답/오답 판단보다는 학생의 생각을 확장하는 데 집중해주세요. 학생에게 유도할 평균의 특징은 다음과 같습니다. 
     A. 평균은 극단값들 사이에 위치한다.
 B. 평균으로부터의 편차들의 합은  0이다.
 C. 평균은 평균 이외의 값들에 의해 영향을 받는다.
@@ -259,7 +284,7 @@ D. 평균은 반드시 합산된 값들 중 하나와 같지 않을 수도 있�
 E. 평균은 물리적 현실에서 대응되는 값이 없을 수도 있는 분수일 수 있다.
 F. 평균을 계산할 때  만약  0이라는 값이 나타나면 반드시 고려해야 한다.
 G. 평균값은 평균화된(were averaged) 값들을 대표한다. 그렇지만 '편차', '합산', '극단값', '대응'등 과 같은 용어를 직접적으로 사용하거나 답을 바로 알려줘서는 안됩니다. 최대한 초등학생이 이해하기 쉽도록 힌트가 될 수 있게 설명해주세요.
-답은 'FEEDBACK:' 접두사로 시작해주세요."""
+답은 'FEEDBACK:' 접두사로 시작해주세요. 그리고 이 수업의 목표에서 벗어난 이야기를 할 때는 주의를 주고 다시 수업에 집중할 수 있도록 해야 합니다."""
     user_message = f"""학생의 답변: {student_answer}"""
     messages = [{"role": "system", "content": system_message}, {"role": "user", "content": user_message}]
     try:
@@ -316,11 +341,22 @@ def student_page_2_graph60():
     graph_col, task_col, popup_col = setup_columns_and_display_popups('student_page_2_graph60')
     
     with graph_col:
+        # 챗봇 활성화 조건: p2p1_attempts가 아니라 page2_show_cumulative_popup5로 제어되고 있음
+        # 해당 조건이 True일 때 챗봇이 나타납니다.
         if st.session_state.get('page2_show_cumulative_popup5', False):
-            if len(st.session_state['chat_log_page2']) == 0:
+            # 챗봇이 처음 활성화될 때 시스템 프롬프트와 첫 메시지를 설정합니다.
+            if not st.session_state.get('chat_log_page2'): # 로그가 비어있을 때만 실행
+                system_prompt = f"""너는 초등학생의 평균 개념 학습을 돕는 친절한 AI 튜터야.
+                학생은 '평균 60점 만들기' 과제에서 5번 이상 오답을 제출해서 도움이 필요한 상황이야.
+                학생이 마지막으로 제출한 답은 '{st.session_state.get('p2p1_answer', '(답변 없음)')}' 이야.
+                학생이 '평균을 기준으로 초과한 부분과 부족한 부분의 총합(또는 넓이)이 같다'는 개념을 깨닫도록 유도해야 해.
+                그래프의 보라색과 초록색 영역에 대해 힌트를 주거나, '평균보다 높은 점수와 낮은 점수들은 어떤 관계가 있을까?'와 같이 질문을 던져서 학생이 스스로 생각하게 만들어줘."""
+                
                 st.session_state['chat_log_page2'] = [
-                    {"role": "assistant", "content": "그래프의 높낮이를 조절하면서 어떤 변화가 있는지 살펴보고, 도움이 필요한 부분이 있다면 질문해주세요."},
+                    {"role": "system", "content": system_prompt},
+                    {"role": "assistant", "content": "그래프를 움직이면서 어떤 점이 가장 헷갈리거나 궁금했는지 이야기해줄 수 있나요?"}
                 ]
+        
         if 'graph_prev_values' not in st.session_state:
             st.session_state['graph_prev_values'] = (0, 0, 0, 0, 0)
         result = tuple(draggable_barchart("graph_page_2", labels=["1회", "2회", "3회", "4회", "5회"], hint=st.session_state.get('p2_graph_hint', False)))
@@ -562,7 +598,7 @@ def student_page_2_graph60():
                     st.session_state['p2_graph_hint'] = True
             if st.button("답변 제출", key="btn_submit_p2p1", disabled=is_input_disabled):
                 st.session_state['p2p1_answer'] = student_answer
-                is_correct, gpt_comment = evaluate_page2_problem1_with_gpt(student_answer, PAGE2_PROBLEM1_GOAL_CONCEPT)
+                is_correct, gpt_comment = evaluate_page2_problem1_with_gpt(student_answer, PAGE2_PROBLEM1_GOAL_CONCEPT, result)
                 feedback_history = st.session_state.get('p2p1_feedback_history', [])
                 if is_correct:
                     st.session_state['p2p1_correct'] = True
@@ -590,18 +626,27 @@ def student_page_2_graph60():
                     st.success(st.session_state['p2p1_feedback'])
                 else:
                     st.warning(st.session_state['p2p1_feedback'])
-            chatLog = st.session_state['chat_log_page2']
-            if st.session_state.get('page2_show_cumulative_popup5', False) and len(chatLog) > 0:
+            chatLog = st.session_state.get('chat_log_page2', [])
+            if st.session_state.get('page2_show_cumulative_popup5', False) and chatLog:
+                # 시스템 메시지는 화면에 표시하지 않음
                 for chat in chatLog:
-                    if chat["role"] == "system": continue
-                    with st.chat_message(chat["role"]): st.markdown(chat["content"])
-                chat_input = st.chat_input("답변:")
+                    if chat["role"] == "system": 
+                        continue
+                    with st.chat_message(chat["role"]): 
+                        st.markdown(chat["content"])
+
+                # 사용자 입력 처리
+                chat_input = st.chat_input("질문이나 생각을 입력해봐!")
                 if chat_input:
-                    st.session_state['chat_log_page2'].append({"role":"system","content":"학생이 그래프를 조작하고 있습니다. 그래프의 값: "+str({f"{i+1}회":v for i,v in enumerate(result)})})
+                    # 사용자 입력을 로그에 추가
                     st.session_state['chat_log_page2'].append({"role": "user", "content": chat_input})
                     st.rerun()
-                elif chatLog[-1]["role"] == "user":
-                    response = client.chat.completions.create(model="gpt-4.1",messages=chatLog)
+                # 마지막 메시지가 사용자인 경우, AI 응답 생성
+                elif chatLog and chatLog[-1]["role"] == "user":
+                    response = client.chat.completions.create(
+                        model="gpt-4.1",
+                        messages=st.session_state['chat_log_page2'] # 전체 로그 전달
+                    )
                     st.session_state['chat_log_page2'].append({"role": "assistant", "content": response.choices[0].message.content})
                     st.rerun()
             
@@ -829,8 +874,10 @@ def student_page_4_myavg_tasks():
                 gpt_result, gpt_comment = evaluate_page4_problem3_with_gpt(
                     student_answer,
                     PAGE4_PROBLEM3_GOAL_CONCEPT,
-                    PAGE4_PROBLEM3_SCAFFOLDING_PROMPT,
+                    result,
+                    target_avg
                 )
+                
                 key_terms = ["평균", "그래프", "자료", "값", "합", "차이", "막대", "합계", "더하다", "빼다", "뺄셈"]
                 is_correct = gpt_result or (any(term in student_answer for term in key_terms) and len(student_answer.strip()) >= 5)
                 if is_correct:
@@ -844,9 +891,19 @@ def student_page_4_myavg_tasks():
                 st.session_state['p4p3_feedback_history'].append(st.session_state['p4p3_feedback'])
                 
                 if st.session_state['p4p3_attempts'] >= 5:
-                    if len(st.session_state['chat_log_page4_p3']) == 0:
-                        st.session_state['chat_log_page4_p3'] = [{"role": "assistant", "content": "평균과 각각의 자료의 값이 어떤 관련이 있었는지 생각해보고, 궁금한 점을 질문해주세요!"}]
-                
+                    # 챗봇이 처음 활성화될 때 시스템 프롬프트와 첫 메시지를 설정합니다.
+                    if not st.session_state.get('chat_log_page4_p3'): # 로그가 비어있을 때만 실행
+                        system_prompt = f"""너는 초등학생의 평균 개념 학습을 돕는 친절한 AI 튜터야. 
+                        학생이 '{st.session_state.get('p4p3_answer', '')}'라고 답변했지만, 5번 이상 오답을 제출해서 도움이 필요한 상황이야.
+                        학생이 설정한 목표 평균은 {target_avg}000원이었어.
+                        학생이 평균과 각 자료 값의 차이의 합이 0이 되어야 한다는 점을 깨닫도록 유도해줘. 
+                        답을 직접 알려주지 말고, '평균보다 높은 값들과 낮은 값들은 어떤 관계가 있을까?' 와 같이 힌트를 주거나 질문을 던져서 학생이 스스로 생각하게 만들어줘."""
+                        
+                        st.session_state['chat_log_page4_p3'] = [
+                            {"role": "system", "content": system_prompt},
+                            {"role": "assistant", "content": "막대를 움직일 때 어떤 점을 가장 중요하게 생각했는지, 또는 어떤 기준으로 막대를 멈췄는지 이야기해줄 수 있나요?"}
+                        ]
+
                 # --- cumulative_popup_shown 정보 구성 시작 ---
                 popups_shown_p4p3 = []
                 if st.session_state.get('p4p3_attempts',0) >= 5:
@@ -882,10 +939,12 @@ def student_page_4_myavg_tasks():
                     with st.chat_message(chat["role"]): st.markdown(chat["content"])
                 chat_input = st.chat_input("질문 또는 생각을 입력하세요:")
                 if chat_input:
+                    # 사용자의 입력을 로그에 추가합니다. (여기서 system 프롬프트를 추가하지 않습니다!)
                     st.session_state['chat_log_page4_p3'].append({"role": "user", "content": chat_input})
                     st.rerun()
-                elif st.session_state['chat_log_page4_p3'] and st.session_state['chat_log_page4_p3'][-1]["role"] == "user":
-                    response = client.chat.completions.create(model="gpt-4.1",messages=st.session_state['chat_log_page4_p3'])
+                elif st.session_state.get('chat_log_page4_p3') and st.session_state['chat_log_page4_p3'][-1]["role"] == "user":
+                    # API 호출 시 수정된 chat_log가 그대로 전달됩니다.
+                    response = client.chat.completions.create(model="gpt-4.1", messages=st.session_state['chat_log_page4_p3'])
                     st.session_state['chat_log_page4_p3'].append({"role": "assistant", "content": response.choices[0].message.content})
                     st.rerun()
                     
@@ -912,7 +971,7 @@ def student_page_4_myavg_tasks():
             if st.button("답변 제출", key="btn_submit_p4p4", disabled=is_input_disabled):
                 st.session_state['p4p4_answer'] = student_answer
                 st.session_state['p4p4_attempts'] += 1
-                _, gpt_comment = evaluate_page4_problem4_with_gpt(student_answer)
+                _, gpt_comment = evaluate_page4_problem4_with_gpt(student_answer, result, target_avg)
                 is_correct = "평균" in student_answer 
                 if is_correct:
                     st.session_state['p4p4_correct'] = True
@@ -923,7 +982,19 @@ def student_page_4_myavg_tasks():
                 st.session_state['p4p4_feedback_history'].append(st.session_state['p4p4_feedback'])
                 
                 if st.session_state['p4p4_attempts'] >= 3:
-                    if len(st.session_state['chat_log_page4_p4']) == 0:
+                    # 챗봇이 처음 활성화될 때 시스템 프롬프트와 첫 메시지를 설정
+                    if not st.session_state.get('chat_log_page4_p4'): # 로그가 비어있을 때만 실행
+                        system_prompt = f"""너는 초등학생의 평균 개념 학습을 돕는 친절한 AI 튜터야.
+                        학생은 '평균의 특징과 함정'에 대한 마지막 과제에서 3번 이상 오답을 제출해서 도움이 필요한 상황이야.
+                        학생이 마지막으로 제출한 답은 '{st.session_state.get('p4p4_answer', '(답변 없음)')}' 이야.
+                        생은 평균의 특징이나 '평균의 함정'에 대해 자신이 알게된 사실을 설명했습니다. 학생 답변 내용과 관련된 평균의 추가적인 특징이나 흥미로운 점에 대해 짧게 언급하며 탐구를 유도해주세요. 정답/오답 판단보다는 학생의 생각을 확장하는 데 집중해주세요. 학생에게 유도할 평균의 특징은 다음과 같습니다. 
+    A. 평균은 극단값들 사이에 위치한다.
+B. 평균으로부터의 편차들의 합은  0이다.
+C. 평균은 평균 이외의 값들에 의해 영향을 받는다.
+D. 평균은 반드시 합산된 값들 중 하나와 같지 않을 수도 있다.
+E. 평균은 물리적 현실에서 대응되는 값이 없을 수도 있는 분수일 수 있다.
+F. 평균을 계산할 때  만약  0이라는 값이 나타나면 반드시 고려해야 한다.
+G. 평균값은 평균화된(were averaged) 값들을 대표한다. 그렇지만 '편차', '합산', '극단값', '대응'등 과 같은 용어를 직접적으로 사용하거나 답을 바로 알려줘서는 안됩니다. 최대한 초등학생이 이해하기 쉽도록 힌트가 될 수 있게 설명해주세요."""
                         st.session_state['chat_log_page4_p4'] = [{"role": "assistant", "content": "평균의 특징이나 함정에 대해 궁금한 점이 있나요? 무엇이든 질문해보세요!"}]
                 
                 # --- cumulative_popup_shown 정보 구성 시작 ---
@@ -955,16 +1026,27 @@ def student_page_4_myavg_tasks():
                 else:
                     st.warning(st.session_state['p4p4_feedback'])
             # 챗봇 (오답 5회 이상)
-            if st.session_state.get('p4p4_attempts', 0) >= 3 and st.session_state.get('chat_log_page4_p4', []):
-                for chat in st.session_state['chat_log_page4_p4']:
-                    if chat["role"] == "system": continue
-                    with st.chat_message(chat["role"]): st.markdown(chat["content"])
-                chat_input = st.chat_input("질문 또는 생각을 입력하세요:")
+            chatLog_p4p4 = st.session_state.get('chat_log_page4_p4', [])
+            if st.session_state.get('p4p4_attempts', 0) >= 3 and chatLog_p4p4:
+                # 시스템 메시지는 화면에 표시하지 않음
+                for chat in chatLog_p4p4:
+                    if chat["role"] == "system": 
+                        continue
+                    with st.chat_message(chat["role"]): 
+                        st.markdown(chat["content"])
+
+                # 사용자 입력 처리
+                chat_input = st.chat_input("평균에 대해 궁금한 점을 물어보세요!")
                 if chat_input:
+                    # 사용자 입력을 로그에 추가
                     st.session_state['chat_log_page4_p4'].append({"role": "user", "content": chat_input})
                     st.rerun()
-                elif st.session_state['chat_log_page4_p4'] and st.session_state['chat_log_page4_p4'][-1]["role"] == "user":
-                    response = client.chat.completions.create(model="gpt-4.1",messages=st.session_state['chat_log_page4_p4'])
+                # 마지막 메시지가 사용자인 경우, AI 응답 생성
+                elif chatLog_p4p4 and chatLog_p4p4[-1]["role"] == "user":
+                    response = client.chat.completions.create(
+                        model="gpt-4.1",
+                        messages=st.session_state['chat_log_page4_p4'] # 전체 로그 전달
+                    )
                     st.session_state['chat_log_page4_p4'].append({"role": "assistant", "content": response.choices[0].message.content})
                     st.rerun()
             if st.session_state.get('p4p4_correct', False):
@@ -983,8 +1065,11 @@ def student_page_4_myavg_tasks():
 
 # --- 학생 페이지 5 (학습완료) ---
 def student_page_5_completion():
-    st.header("학습 완료!")
-    st.write(f"{st.session_state.get('student_name','학생')} 학생, 평균 학습 과제를 모두 완료했습니다! 수고했어요!")
+    st.header("✨ 학습 완료! ✨")
+    st.balloons()
+    st.success(f"🎉 {st.session_state.get('student_name','학생')} 학생, 평균 학습 활동을 모두 성공적으로 마쳤습니다! 정말 수고 많았어요! 🎉")
+    st.markdown("평균에 대해 많은 것을 배우고 탐구하는 즐거운 시간이었기를 바랍니다.")
+    st.markdown("---")
     col1, col2 = st.columns(2)
     with col1:
         if st.button("다른 평균 설정하여 다시 도전하기"):
@@ -1001,7 +1086,7 @@ def student_page_5_completion():
                 if k in st.session_state: del st.session_state[k]
             st.rerun()
     with col2:
-        if st.button("홈으로"):
+        if st.button("🏠 처음으로 돌아가기"):
             st.session_state['page'] = 'main'
             st.rerun()
 
@@ -1018,7 +1103,7 @@ def teacher_page():
                 st.info(f"데이터 디렉토리 '{STUDENT_DATA_DIR}'가 아직 없습니다. 학생 활동이 시작되면 생성됩니다.")
                 student_files = []
             else:
-                student_files = sorted([f for f in os.listdir(STUDENT_DATA_DIR) if f.startswith("student_") and f.endswith(".json")], reverse=True) # 최근 파일이 위로
+                student_files = sorted([f for f in os.listdir(STUDENT_DATA_DIR) if f.startswith("student_") and f.endswith(".json")], reverse=True)
         except Exception as e:
             st.error(f"학생 데이터 파일 목록 로딩 오류: {e}")
             student_files = []
@@ -1026,41 +1111,63 @@ def teacher_page():
         if not student_files:
             st.info("아직 저장된 학생 데이터가 없습니다.")
         else:
-            if 'selected_student_file_teacher' not in st.session_state: st.session_state.selected_student_file_teacher = None
-            if 'delete_confirmation_active' not in st.session_state: st.session_state.delete_confirmation_active = False
-            if 'current_file_to_delete' not in st.session_state: st.session_state.current_file_to_delete = None
-
-            def on_student_select_teacher():
-                st.session_state.selected_student_file_teacher = st.session_state.selectbox_student_files_teacher
-                st.session_state.delete_confirmation_active = False # 학생 변경 시 삭제 확인 초기화
+            # 세션 상태 초기화 (교사 페이지 진입 시 한 번 또는 선택 변경 시)
+            if 'selected_student_file_teacher' not in st.session_state:
+                st.session_state.selected_student_file_teacher = None
+            if 'delete_confirmation_active' not in st.session_state:
+                st.session_state.delete_confirmation_active = False
+            if 'current_file_to_delete' not in st.session_state:
                 st.session_state.current_file_to_delete = None
 
-            selected_idx = student_files.index(st.session_state.selected_student_file_teacher) if st.session_state.selected_student_file_teacher in student_files else 0 if student_files else None
+            # 콜백 함수: selectbox 값 변경 시 실행
+            def handle_student_selection():
+                # 현재 selectbox 위젯의 값을 session_state에 저장
+                st.session_state.selected_student_file_teacher = st.session_state.selectbox_student_files_widget
+                # 학생 선택이 변경되면 삭제 확인 상태 초기화
+                st.session_state.delete_confirmation_active = False
+                st.session_state.current_file_to_delete = None
+                # st.rerun() # 여기서 rerun하면 선택 후 바로 UI가 다시 그려져서 아래 로직이 실행됨
 
-            st.selectbox("학생 선택:", student_files, index=selected_idx, 
-                         placeholder="학생 기록을 보려면 선택하세요.", key="selectbox_student_files_teacher",
-                         on_change=on_student_select_teacher)
+            # selectbox의 현재 값(index) 설정
+            try:
+                current_selection_index = student_files.index(st.session_state.selected_student_file_teacher) if st.session_state.selected_student_file_teacher in student_files else 0 if student_files else None
+            except ValueError: # 이전에 선택한 파일이 삭제된 경우 등
+                current_selection_index = 0 if student_files else None
+                st.session_state.selected_student_file_teacher = None # 선택 초기화
+
+            st.selectbox(
+                "학생 선택:", 
+                student_files, 
+                index=current_selection_index,
+                placeholder="학생 기록을 보려면 선택하세요.", 
+                key="selectbox_student_files_widget", # 위젯을 위한 고유 키
+                on_change=handle_student_selection # 변경 시 콜백 실행
+            )
             
+            # 콜백 후, selected_student_file_teacher 세션 상태를 사용
             selected_student_file = st.session_state.selected_student_file_teacher
+            # st.write(f"디버그: 선택된 파일 (세션 상태): {selected_student_file}") # 디버깅용
 
             if selected_student_file:
                 filepath = os.path.join(STUDENT_DATA_DIR, selected_student_file)
                 student_display_name = selected_student_file.replace('student_', '').replace('.json', '').replace('_', ' ')
+                # st.write(f"디버그: 파일 경로: {filepath}") # 디버깅용
 
-                if not os.path.exists(filepath): # 파일 삭제 후 UI 업데이트 대응
-                    st.warning(f"선택한 파일 '{selected_student_file}'을 찾을 수 없습니다. 다른 학생을 선택해주세요.")
-                    st.session_state.selected_student_file_teacher = None
-                    st.rerun()
-                    return
+                if not os.path.exists(filepath):
+                    st.warning(f"선택한 파일 '{selected_student_file}'을 찾을 수 없습니다. 목록에서 다른 학생을 선택해주세요.")
+                    st.session_state.selected_student_file_teacher = None # 선택 해제
+                    st.rerun() # UI 갱신
+                    return # 함수 종료
 
                 st.subheader(f"📊 {student_display_name} 학생의 학습 기록 요약")
                 try:
-                    with open(filepath, 'r', encoding='utf-8') as f: student_data_loaded = json.load(f)
+                    with open(filepath, 'r', encoding='utf-8') as f: 
+                        student_data_loaded = json.load(f)
+                    # st.write("디버그: 로드된 학생 데이터:", student_data_loaded) # 디버깅용
                     
                     if not student_data_loaded:
                         st.info(f"'{student_display_name}' 학생의 기록이 비어있습니다.")
                     else:
-                        # DataFrame 생성
                         summary_table_data = []
                         for entry_sum in student_data_loaded:
                             summary_table_data.append({
@@ -1069,93 +1176,102 @@ def teacher_page():
                                 "정오": "O" if entry_sum.get("is_correct") else "X", "시도수": entry_sum.get("attempt"),
                                 "피드백수": len(entry_sum.get("feedback_history", [])),
                                 "팝업": ", ".join(str(x).split('_')[-1].replace('P2P1','P2').replace('P4P3','P4.3').replace('P4P4','P4.4') for x in entry_sum.get("cumulative_popup_shown", [])),
-                                "챗봇수": len([c for c in entry_sum.get("chatbot_interactions", []) if c.get("role") == "user"]), # 사용자 질문 수 기준
+                                "챗봇수": len([c for c in entry_sum.get("chatbot_interactions", []) if c.get("role") == "user"]),
                             })
                         df_summary = pd.DataFrame(summary_table_data)
-                        st.dataframe(df_summary, use_container_width=True, height=min(300, len(df_summary) * 35 + 38)) # 동적 높이
+                        st.dataframe(df_summary, use_container_width=True, height=min(300, len(df_summary) * 35 + 38))
                         
                         csv_summary = df_summary.to_csv(index=False).encode('utf-8-sig')
                         st.download_button(label="💾 요약 기록 다운로드 (CSV)", data=csv_summary,
                                           file_name=f"{student_display_name}_요약기록.csv", mime="text/csv",
                                           key=f"download_summary_{selected_student_file}")
 
-                        # --- 학생 활동 상세 분석 ---
                         st.markdown("---")
                         st.subheader(f"🔬 {student_display_name} 학생 활동 상세 분석")
                         for i, entry_detail in enumerate(student_data_loaded):
-                            exp_key_base = f"detail_entry_{selected_student_file}_{i}"
+                            exp_key_base = f"detail_entry_{selected_student_file.replace('.json','')}_{i}" # 키에 특수문자 제거
                             entry_summary_text = f"({entry_detail.get('timestamp')}) 페이지: {entry_detail.get('page')}, 문제: {entry_detail.get('problem')}, 시도: {entry_detail.get('attempt')}"
                             
                             with st.expander(f"기록 #{i+1}: {entry_summary_text}", expanded=False):
                                 st.markdown(f"**학생 제출 내용:**")
                                 student_ans = entry_detail.get("student_answer", "N/A")
                                 if isinstance(student_ans, (list, dict)): st.json(student_ans)
-                                else: st.markdown(f"> ```\n{student_ans}\n```" if student_ans else "> 답변 없음")
+                                else: st.code(str(student_ans) if student_ans else "답변 없음", language="text")
+
 
                                 fb_history = entry_detail.get("feedback_history", [])
                                 if fb_history:
-                                    with st.expander("💬 피드백 전체 내용 보기", expanded=False, key=f"{exp_key_base}_fb_exp"):
+                                    with st.expander("💬 피드백 전체 내용 보기", expanded=False): # 키 단순화 가능
                                         for fb_idx, fb_item in enumerate(fb_history):
-                                            st.text_area(f"피드백 #{fb_idx+1}", value=fb_item, height=max(80, int(len(fb_item)/2.5)), disabled=True, key=f"{exp_key_base}_fb_item_{fb_idx}")
+                                            st.text_area(f"피드백 #{fb_idx+1}", value=fb_item, height=max(60, int(len(fb_item)/3)+20), disabled=True, key=f"{exp_key_base}_fb_item_{fb_idx}")
                                 else: st.markdown("**피드백 기록 없음**")
 
                                 chat_interactions = entry_detail.get("chatbot_interactions", [])
                                 if chat_interactions:
-                                    # 실제 챗봇 대화가 있는 경우 (system 프롬프트 제외하고 user, assistant만)
                                     actual_chats = [c for c in chat_interactions if c.get("role") in ["user", "assistant"]]
                                     if actual_chats:
-                                        with st.expander("🤖 챗봇 대화 전체 내용 보기", expanded=False, key=f"{exp_key_base}_chat_exp"):
+                                        with st.expander("🤖 챗봇 대화 전체 내용 보기", expanded=False): # 키 단순화 가능
                                             for chat_idx, chat_item in enumerate(actual_chats):
                                                 role, content = chat_item.get("role"), chat_item.get("content")
                                                 if role and content:
                                                     avatar_icon = "🧑‍🎓" if role == "user" else "🤖"
                                                     with st.chat_message(role, avatar=avatar_icon, key=f"{exp_key_base}_chat_item_{chat_idx}"):
                                                         st.markdown(content)
-                                    else: st.markdown("**챗봇과의 실제 대화 기록 없음**") # System 프롬프트만 있는 경우
+                                    else: st.markdown("**챗봇과의 실제 대화 기록 없음**")
                                 else: st.markdown("**챗봇 대화 기록 없음**")
                                 
                                 cum_popups = entry_detail.get("cumulative_popup_shown", [])
                                 if cum_popups: st.markdown(f"**표시된 누적 팝업:** `{', '.join(cum_popups)}`")
                                 st.markdown("---")
-                        # --- 상세 분석 끝 ---
 
-                        # --- 학생 기록 파일 삭제 기능 ---
                         st.markdown("---")
                         st.subheader(f"🔴 '{student_display_name}' 학생 기록 파일 관리")
+                        # 삭제 확인 상태는 current_file_to_delete와 selected_student_file이 일치할 때만 활성화
                         if st.session_state.delete_confirmation_active and st.session_state.current_file_to_delete == selected_student_file:
                             st.error(f"정말로 '{student_display_name}' 학생의 모든 기록 파일을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다!")
                             col_del_confirm, col_del_cancel = st.columns(2)
                             with col_del_confirm:
-                                if st.button("✔️ 예, 영구 삭제합니다", key=f"btn_del_confirm_{selected_student_file}", type="primary", use_container_width=True):
+                                if st.button("✔️ 예, 영구 삭제합니다", key=f"btn_del_confirm_final_{selected_student_file}", type="primary", use_container_width=True):
                                     try:
-                                        os.remove(filepath); st.success(f"'{student_display_name}' 학생 기록 파일 삭제 완료.")
-                                        st.session_state.delete_confirmation_active = False; st.session_state.current_file_to_delete = None
-                                        st.session_state.selected_student_file_teacher = None # 선택 해제하여 목록 새로고침 유도
+                                        os.remove(filepath)
+                                        st.success(f"'{student_display_name}' 학생 기록 파일 삭제 완료.")
+                                        st.session_state.delete_confirmation_active = False
+                                        st.session_state.current_file_to_delete = None
+                                        st.session_state.selected_student_file_teacher = None 
                                         st.rerun()
-                                    except Exception as e_del: st.error(f"파일 삭제 오류: {e_del}"); st.rerun()
+                                    except Exception as e_del: 
+                                        st.error(f"파일 삭제 오류: {e_del}")
+                                        st.session_state.delete_confirmation_active = False # 오류 시 확인 상태 리셋
+                                        st.session_state.current_file_to_delete = None
+                                        st.rerun()
                             with col_del_cancel:
-                                if st.button("❌ 아니요, 취소합니다", key=f"btn_del_cancel_{selected_student_file}", use_container_width=True):
-                                    st.session_state.delete_confirmation_active = False; st.session_state.current_file_to_delete = None; st.rerun()
+                                if st.button("❌ 아니요, 취소합니다", key=f"btn_del_cancel_final_{selected_student_file}", use_container_width=True):
+                                    st.session_state.delete_confirmation_active = False
+                                    st.session_state.current_file_to_delete = None
+                                    st.rerun()
                         else:
-                            if st.button(f"🗑️ '{student_display_name}' 학생 기록 파일 삭제하기", key=f"btn_del_req_{selected_student_file}", use_container_width=True, type="destructive" if hasattr(st, 'button') and 'type' in st.button.__kwdefaults__ and 'destructive' in st.button.__kwdefaults__['type'] else "secondary"):
-                                st.session_state.delete_confirmation_active = True; st.session_state.current_file_to_delete = selected_student_file; st.rerun()
-                        # --- 파일 삭제 끝 ---
+                            # 삭제 요청 버튼은 항상 표시 (선택된 학생이 있을 때)
+                            if st.button(f"🗑️ '{student_display_name}' 학생 기록 파일 삭제하기", key=f"btn_del_req_init_{selected_student_file}", use_container_width=True):
+                                st.session_state.delete_confirmation_active = True
+                                st.session_state.current_file_to_delete = selected_student_file # 삭제 대상 명시
+                                st.rerun() # 확인 UI를 표시하기 위해 rerun
 
                 except json.JSONDecodeError: st.error(f"'{selected_student_file}' 파일이 손상되어 읽을 수 없습니다 (JSON 형식 오류).")
                 except Exception as e_load: st.error(f"'{student_display_name}' 학생 데이터 처리 중 오류: {e_load}")
-            # else: st.info("학생을 선택하면 기록을 볼 수 있습니다.") # placeholder로 대체됨
+            # else:
+                # st.info("위 목록에서 학생을 선택하면 학습 기록을 자세히 볼 수 있습니다.") # placeholder가 이미 있음
 
     elif password and password != TEACHER_PASSWORD:
         st.error("비밀번호가 틀렸습니다.")
 
-    if st.button("↩️ 초기 화면으로", key="back_teacher_to_main_page"):
+    if st.button("↩️ 초기 화면으로", key="back_teacher_to_main_page_final"):
         st.session_state['page'] = 'main'
-        # 교사 페이지 관련 상태 초기화
         if 'teacher_pw_input_main' in st.session_state: del st.session_state['teacher_pw_input_main']
         if 'selected_student_file_teacher' in st.session_state: del st.session_state['selected_student_file_teacher']
         if 'delete_confirmation_active' in st.session_state: del st.session_state['delete_confirmation_active']
         if 'current_file_to_delete' in st.session_state: del st.session_state.current_file_to_delete
         st.rerun()
+
 
 # --- 메인 페이지 ---
 def main_page():
