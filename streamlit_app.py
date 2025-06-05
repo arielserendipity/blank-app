@@ -23,7 +23,7 @@ PAGE2_PROBLEM1_FEEDBACK_LOOP = {
 }
 PAGE4_PROBLEM3_GOAL_CONCEPT = "자료의 값과 평균 사이의 차이의 총합이 항상 0이 되도록 자료의 값을 조절하면 예측한 평균을 달성할 수 있다는 점을 인지하는 것"
 PAGE4_PROBLEM3_SCAFFOLDING_PROMPT = """당신은 학생이 평균 개념을 깊이 이해하도록 돕는 AI 튜터입니다. 학생은 자신이 설정한 평균을 달성하기 위해 그래프 자료의 값을 조절하는 활동을 했습니다. 이 과정에서 자신이 사용한 전략에 대해 설명하라는 질문에 답변했습니다. 학생의 답변이 목표 개념인 "{goal_concept}"과 얼마나 관련 있는지 평가해주세요. 목표 개념을 직접적으로 언급하거나 답을 알려주지 말고, 학생의 현재 이해 수준에서 다음 단계로 나아갈 수 있도록 유도하는 질문이나 발문을 생성해주세요. 학생의 답변이 목표 개념과 거리가 멀다면 기본적인 개념(자료의 총합과 개수)으로 돌아가는 발문을, 조금이라도 관련 있다면 편차의 합 등 심화 개념으로 나아가도록 발문을 시도해주세요. 응답은 'FEEDBACK:' 접두사로 시작해주세요."""
-CUMULATIVE_FEEDBACK_4 = "잘 해결할 수 있는 힌트를 드릴게요! 각각의 색이 무엇을 의미하는 지 생각해보세요."
+CUMULATIVE_FEEDBACK_4 = "각각의 색이 무엇을 의미하는 지 생각해보세요."
 CUMULATIVE_FEEDBACK_5 = "추가 힌트를 드릴게요! 각각의 색의 넓이를 비교해보세요!"
 
 # 아래는 2-3, 2-4 루프/팝업 피드백 추가
@@ -1008,55 +1008,38 @@ def student_page_5_completion():
 # --- 교사용 페이지 (모든 데이터 표/엑셀) ---
 def teacher_page():
     st.header("교사용 페이지")
-    password = st.text_input("비밀번호를 입력하세요", type="password", key="teacher_pw_input") # 키 변경
+    password = st.text_input("비밀번호를 입력하세요", type="password", key="teacher_pw_input_main")
 
     if password == TEACHER_PASSWORD:
-        st.success("🔑 접속 성공!")
+        st.success("🔑 비밀번호 인증 성공!")
         
         try:
-            # STUDENT_DATA_DIR 존재 확인
             if not os.path.exists(STUDENT_DATA_DIR):
-                st.info(f"데이터 디렉토리 '{STUDENT_DATA_DIR}'가 아직 생성되지 않았습니다. 학생이 활동을 시작하면 자동으로 생성됩니다.")
+                st.info(f"데이터 디렉토리 '{STUDENT_DATA_DIR}'가 아직 없습니다. 학생 활동이 시작되면 생성됩니다.")
                 student_files = []
             else:
-                student_files = [f for f in os.listdir(STUDENT_DATA_DIR) if f.startswith("student_") and f.endswith(".json")]
+                student_files = sorted([f for f in os.listdir(STUDENT_DATA_DIR) if f.startswith("student_") and f.endswith(".json")], reverse=True) # 최근 파일이 위로
         except Exception as e:
-            st.error(f"학생 데이터 파일 목록을 불러오는 중 오류 발생: {e}")
+            st.error(f"학생 데이터 파일 목록 로딩 오류: {e}")
             student_files = []
 
         if not student_files:
             st.info("아직 저장된 학생 데이터가 없습니다.")
         else:
-            # session_state에 선택된 학생 파일 저장/로드
-            if 'selected_student_file_teacher' not in st.session_state:
-                st.session_state.selected_student_file_teacher = None
+            if 'selected_student_file_teacher' not in st.session_state: st.session_state.selected_student_file_teacher = None
+            if 'delete_confirmation_active' not in st.session_state: st.session_state.delete_confirmation_active = False
+            if 'current_file_to_delete' not in st.session_state: st.session_state.current_file_to_delete = None
 
-            # selectbox의 콜백을 사용하여 선택 변경 시 selected_student_file_teacher 업데이트
-            def on_student_select():
-                st.session_state.selected_student_file_teacher = st.session_state.selectbox_student_files
-                # 선택 변경 시 삭제 확인 상태 초기화
-                if 'delete_confirmation_active' in st.session_state:
-                    del st.session_state.delete_confirmation_active
-                if 'current_file_to_delete' in st.session_state:
-                     del st.session_state.current_file_to_delete
+            def on_student_select_teacher():
+                st.session_state.selected_student_file_teacher = st.session_state.selectbox_student_files_teacher
+                st.session_state.delete_confirmation_active = False # 학생 변경 시 삭제 확인 초기화
+                st.session_state.current_file_to_delete = None
 
+            selected_idx = student_files.index(st.session_state.selected_student_file_teacher) if st.session_state.selected_student_file_teacher in student_files else 0 if student_files else None
 
-            # 현재 st.session_state.selected_student_file_teacher 값이 student_files에 있는지 확인
-            current_selection_index = None
-            if st.session_state.selected_student_file_teacher in student_files:
-                current_selection_index = student_files.index(st.session_state.selected_student_file_teacher)
-            else: # 이전에 선택된 파일이 삭제되었거나 목록에 없는 경우
-                st.session_state.selected_student_file_teacher = None
-
-
-            st.selectbox(
-                "학생 선택:", 
-                student_files, 
-                index=current_selection_index, 
-                placeholder="학생 기록을 보려면 선택하세요.", 
-                key="selectbox_student_files", # selectbox 자체의 키
-                on_change=on_student_select # 변경 시 콜백 호출
-            )
+            st.selectbox("학생 선택:", student_files, index=selected_idx, 
+                         placeholder="학생 기록을 보려면 선택하세요.", key="selectbox_student_files_teacher",
+                         on_change=on_student_select_teacher)
             
             selected_student_file = st.session_state.selected_student_file_teacher
 
@@ -1064,130 +1047,115 @@ def teacher_page():
                 filepath = os.path.join(STUDENT_DATA_DIR, selected_student_file)
                 student_display_name = selected_student_file.replace('student_', '').replace('.json', '').replace('_', ' ')
 
-                # 파일 존재 재확인 (선택과 실제 사용 사이의 시간차 때문)
-                if not os.path.exists(filepath):
-                    st.warning(f"선택한 파일 '{selected_student_file}'을 찾을 수 없습니다. 목록이 곧 업데이트됩니다. 다른 학생을 선택해주세요.")
-                    # 세션 상태에서 해당 파일 선택 해제
+                if not os.path.exists(filepath): # 파일 삭제 후 UI 업데이트 대응
+                    st.warning(f"선택한 파일 '{selected_student_file}'을 찾을 수 없습니다. 다른 학생을 선택해주세요.")
                     st.session_state.selected_student_file_teacher = None
-                    if 'delete_confirmation_active' in st.session_state: # 삭제 확인 중이었다면 취소
-                         del st.session_state.delete_confirmation_active
-                    if 'current_file_to_delete' in st.session_state:
-                         del st.session_state.current_file_to_delete
-                    st.rerun() # 목록 갱신 및 UI 업데이트
+                    st.rerun()
                     return
 
-
-                st.subheader(f"📊 {student_display_name} 학생의 학습 기록")
+                st.subheader(f"📊 {student_display_name} 학생의 학습 기록 요약")
                 try:
-                    with open(filepath, 'r', encoding='utf-8') as f:
-                        student_data = json.load(f)
+                    with open(filepath, 'r', encoding='utf-8') as f: student_data_loaded = json.load(f)
                     
-                    if not student_data: # 파일은 있지만 내용이 비어있는 경우
+                    if not student_data_loaded:
                         st.info(f"'{student_display_name}' 학생의 기록이 비어있습니다.")
                     else:
-                        table_data = []
-                        for d in student_data:
-                            table_data.append({
-                                "시간": d.get("timestamp"),
-                                "페이지": d.get("page"),
-                                "문제": d.get("problem"),
-                                "답변": str(d.get("student_answer"))[:100] + ('...' if len(str(d.get("student_answer", ""))) > 100 else ""), # 답변 길이 제한
-                                "정오": "O" if d.get("is_correct") else "X",
-                                "시도수": d.get("attempt"),
-                                "피드백 수": len(d.get("feedback_history", [])),
-                                "팝업": ", ".join(str(x).split('_')[-1] for x in d.get("cumulative_popup_shown", [])), # 팝업 이름 간결화
-                                "챗봇 수": len(d.get("chatbot_interactions", [])),
-                                # "최종 피드백": d.get("feedback_history", [])[-1][:100] + ('...' if len(d.get("feedback_history", [])[-1]) > 100 else "") if d.get("feedback_history") else "",
+                        # DataFrame 생성
+                        summary_table_data = []
+                        for entry_sum in student_data_loaded:
+                            summary_table_data.append({
+                                "시간": entry_sum.get("timestamp"), "페이지": entry_sum.get("page"), "문제": entry_sum.get("problem"),
+                                "답변요약": str(entry_sum.get("student_answer"))[:30] + ('...' if len(str(entry_sum.get("student_answer", ""))) > 30 else ""),
+                                "정오": "O" if entry_sum.get("is_correct") else "X", "시도수": entry_sum.get("attempt"),
+                                "피드백수": len(entry_sum.get("feedback_history", [])),
+                                "팝업": ", ".join(str(x).split('_')[-1].replace('P2P1','P2').replace('P4P3','P4.3').replace('P4P4','P4.4') for x in entry_sum.get("cumulative_popup_shown", [])),
+                                "챗봇수": len([c for c in entry_sum.get("chatbot_interactions", []) if c.get("role") == "user"]), # 사용자 질문 수 기준
                             })
-                        df = pd.DataFrame(table_data)
-                        st.dataframe(df, use_container_width=True, height=300) # 높이 지정
+                        df_summary = pd.DataFrame(summary_table_data)
+                        st.dataframe(df_summary, use_container_width=True, height=min(300, len(df_summary) * 35 + 38)) # 동적 높이
                         
-                        csv = df.to_csv(index=False).encode('utf-8-sig')
-                        st.download_button(
-                            label="💾 이 학생 기록 다운로드 (CSV)",
-                            data=csv,
-                            file_name=f"{student_display_name}_학습기록.csv",
-                            mime="text/csv",
-                            key=f"download_{selected_student_file}"
-                        )
-                        with st.expander("JSON 원본 데이터 보기"):
-                            st.json(student_data)
+                        csv_summary = df_summary.to_csv(index=False).encode('utf-8-sig')
+                        st.download_button(label="💾 요약 기록 다운로드 (CSV)", data=csv_summary,
+                                          file_name=f"{student_display_name}_요약기록.csv", mime="text/csv",
+                                          key=f"download_summary_{selected_student_file}")
 
-                    # --- 학생 기록 삭제 기능 ---
-                    st.markdown("---")
-                    st.subheader(f"🔴 '{student_display_name}' 학생 기록 삭제")
+                        # --- 학생 활동 상세 분석 ---
+                        st.markdown("---")
+                        st.subheader(f"🔬 {student_display_name} 학생 활동 상세 분석")
+                        for i, entry_detail in enumerate(student_data_loaded):
+                            exp_key_base = f"detail_entry_{selected_student_file}_{i}"
+                            entry_summary_text = f"({entry_detail.get('timestamp')}) 페이지: {entry_detail.get('page')}, 문제: {entry_detail.get('problem')}, 시도: {entry_detail.get('attempt')}"
+                            
+                            with st.expander(f"기록 #{i+1}: {entry_summary_text}", expanded=False):
+                                st.markdown(f"**학생 제출 내용:**")
+                                student_ans = entry_detail.get("student_answer", "N/A")
+                                if isinstance(student_ans, (list, dict)): st.json(student_ans)
+                                else: st.markdown(f"> ```\n{student_ans}\n```" if student_ans else "> 답변 없음")
 
-                    # 삭제 확인 상태 관리 (선택된 파일에 대한 고유 키 사용)
-                    # delete_confirmation_key = f"confirm_delete_active_for_{selected_student_file}"
-                    # if delete_confirmation_key not in st.session_state:
-                    # st.session_state[delete_confirmation_key] = False
-                    
-                    # session_state를 사용하여 삭제 확인 상태 관리
-                    if 'delete_confirmation_active' not in st.session_state:
-                        st.session_state.delete_confirmation_active = False
-                    if 'current_file_to_delete' not in st.session_state:
-                        st.session_state.current_file_to_delete = None
+                                fb_history = entry_detail.get("feedback_history", [])
+                                if fb_history:
+                                    with st.expander("💬 피드백 전체 내용 보기", expanded=False, key=f"{exp_key_base}_fb_exp"):
+                                        for fb_idx, fb_item in enumerate(fb_history):
+                                            st.text_area(f"피드백 #{fb_idx+1}", value=fb_item, height=max(80, int(len(fb_item)/2.5)), disabled=True, key=f"{exp_key_base}_fb_item_{fb_idx}")
+                                else: st.markdown("**피드백 기록 없음**")
 
+                                chat_interactions = entry_detail.get("chatbot_interactions", [])
+                                if chat_interactions:
+                                    # 실제 챗봇 대화가 있는 경우 (system 프롬프트 제외하고 user, assistant만)
+                                    actual_chats = [c for c in chat_interactions if c.get("role") in ["user", "assistant"]]
+                                    if actual_chats:
+                                        with st.expander("🤖 챗봇 대화 전체 내용 보기", expanded=False, key=f"{exp_key_base}_chat_exp"):
+                                            for chat_idx, chat_item in enumerate(actual_chats):
+                                                role, content = chat_item.get("role"), chat_item.get("content")
+                                                if role and content:
+                                                    avatar_icon = "🧑‍🎓" if role == "user" else "🤖"
+                                                    with st.chat_message(role, avatar=avatar_icon, key=f"{exp_key_base}_chat_item_{chat_idx}"):
+                                                        st.markdown(content)
+                                    else: st.markdown("**챗봇과의 실제 대화 기록 없음**") # System 프롬프트만 있는 경우
+                                else: st.markdown("**챗봇 대화 기록 없음**")
+                                
+                                cum_popups = entry_detail.get("cumulative_popup_shown", [])
+                                if cum_popups: st.markdown(f"**표시된 누적 팝업:** `{', '.join(cum_popups)}`")
+                                st.markdown("---")
+                        # --- 상세 분석 끝 ---
 
-                    if st.session_state.delete_confirmation_active and st.session_state.current_file_to_delete == selected_student_file:
-                        st.warning(f"정말로 '{student_display_name}' 학생의 모든 기록을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")
-                        col_confirm, col_cancel = st.columns(2)
-                        with col_confirm:
-                            if st.button("✔️ 예, 삭제합니다", key=f"btn_delete_confirm_{selected_student_file}", type="primary", use_container_width=True):
-                                try:
-                                    os.remove(filepath)
-                                    st.success(f"'{student_display_name}' 학생의 기록이 성공적으로 삭제되었습니다.")
-                                    st.session_state.delete_confirmation_active = False
-                                    st.session_state.current_file_to_delete = None
-                                    st.session_state.selected_student_file_teacher = None # 선택 해제
-                                    st.rerun()
-                                except FileNotFoundError:
-                                    st.error("오류: 파일을 찾을 수 없습니다. 이미 삭제되었을 수 있습니다.")
-                                    st.session_state.delete_confirmation_active = False
-                                    st.session_state.current_file_to_delete = None
-                                    st.rerun()
-                                except Exception as e:
-                                    st.error(f"기록 삭제 중 오류 발생: {e}")
-                                    st.session_state.delete_confirmation_active = False
-                                    st.session_state.current_file_to_delete = None
-                                    st.rerun()
-                        with col_cancel:
-                            if st.button("❌ 아니요, 취소합니다", key=f"btn_delete_cancel_{selected_student_file}", use_container_width=True):
-                                st.session_state.delete_confirmation_active = False
-                                st.session_state.current_file_to_delete = None
-                                st.rerun()
-                    else:
-                        # 현재 선택된 파일과 삭제 대상 파일이 다르면 확인 상태 초기화
-                        if st.session_state.current_file_to_delete != selected_student_file:
-                            st.session_state.delete_confirmation_active = False
-                            st.session_state.current_file_to_delete = None
+                        # --- 학생 기록 파일 삭제 기능 ---
+                        st.markdown("---")
+                        st.subheader(f"🔴 '{student_display_name}' 학생 기록 파일 관리")
+                        if st.session_state.delete_confirmation_active and st.session_state.current_file_to_delete == selected_student_file:
+                            st.error(f"정말로 '{student_display_name}' 학생의 모든 기록 파일을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다!")
+                            col_del_confirm, col_del_cancel = st.columns(2)
+                            with col_del_confirm:
+                                if st.button("✔️ 예, 영구 삭제합니다", key=f"btn_del_confirm_{selected_student_file}", type="primary", use_container_width=True):
+                                    try:
+                                        os.remove(filepath); st.success(f"'{student_display_name}' 학생 기록 파일 삭제 완료.")
+                                        st.session_state.delete_confirmation_active = False; st.session_state.current_file_to_delete = None
+                                        st.session_state.selected_student_file_teacher = None # 선택 해제하여 목록 새로고침 유도
+                                        st.rerun()
+                                    except Exception as e_del: st.error(f"파일 삭제 오류: {e_del}"); st.rerun()
+                            with col_del_cancel:
+                                if st.button("❌ 아니요, 취소합니다", key=f"btn_del_cancel_{selected_student_file}", use_container_width=True):
+                                    st.session_state.delete_confirmation_active = False; st.session_state.current_file_to_delete = None; st.rerun()
+                        else:
+                            if st.button(f"🗑️ '{student_display_name}' 학생 기록 파일 삭제하기", key=f"btn_del_req_{selected_student_file}", use_container_width=True, type="destructive" if hasattr(st, 'button') and 'type' in st.button.__kwdefaults__ and 'destructive' in st.button.__kwdefaults__['type'] else "secondary"):
+                                st.session_state.delete_confirmation_active = True; st.session_state.current_file_to_delete = selected_student_file; st.rerun()
+                        # --- 파일 삭제 끝 ---
 
-                        if st.button(f"🗑️ '{student_display_name}' 학생 기록 파일 삭제하기", key=f"btn_delete_request_{selected_student_file}", use_container_width=True):
-                            st.session_state.delete_confirmation_active = True
-                            st.session_state.current_file_to_delete = selected_student_file # 삭제 대상 파일명 저장
-                            st.rerun()
-                    # --- 삭제 기능 끝 ---
+                except json.JSONDecodeError: st.error(f"'{selected_student_file}' 파일이 손상되어 읽을 수 없습니다 (JSON 형식 오류).")
+                except Exception as e_load: st.error(f"'{student_display_name}' 학생 데이터 처리 중 오류: {e_load}")
+            # else: st.info("학생을 선택하면 기록을 볼 수 있습니다.") # placeholder로 대체됨
 
-                except json.JSONDecodeError:
-                    st.error(f"'{selected_student_file}' 파일이 올바른 JSON 형식이 아닙니다. 파일이 손상되었을 수 있습니다.")
-                except Exception as e:
-                    st.error(f"'{student_display_name}' 학생 데이터 처리 중 예상치 못한 오류 발생: {e}")
-            # else: # selected_student_file이 None일 때 (선택된 학생이 없을 때)
-                # st.info("학생을 선택하면 기록을 확인하고 관리할 수 있습니다.") # placeholder로 대체됨
-
-    elif password and password != TEACHER_PASSWORD: # 비밀번호를 입력했지만 틀린 경우
+    elif password and password != TEACHER_PASSWORD:
         st.error("비밀번호가 틀렸습니다.")
-    # 비밀번호를 아예 입력하지 않은 경우는 text_input 위젯만 보이므로 별도 메시지 불필요
 
-    if st.button("↩️ 초기 화면으로 돌아가기", key="back_teacher_to_main"): # 키 변경 및 문구 명확화
+    if st.button("↩️ 초기 화면으로", key="back_teacher_to_main_page"):
         st.session_state['page'] = 'main'
-        # 교사 페이지 관련 상태 초기화 (선택적)
-        if 'teacher_pw_input' in st.session_state: del st.session_state['teacher_pw_input']
+        # 교사 페이지 관련 상태 초기화
+        if 'teacher_pw_input_main' in st.session_state: del st.session_state['teacher_pw_input_main']
         if 'selected_student_file_teacher' in st.session_state: del st.session_state['selected_student_file_teacher']
         if 'delete_confirmation_active' in st.session_state: del st.session_state['delete_confirmation_active']
         if 'current_file_to_delete' in st.session_state: del st.session_state.current_file_to_delete
         st.rerun()
-
 
 # --- 메인 페이지 ---
 def main_page():
