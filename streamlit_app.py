@@ -1098,55 +1098,36 @@ def teacher_page():
     if password == TEACHER_PASSWORD:
         st.success("🔑 비밀번호 인증 성공!")
         
+        # 디버깅 1: 데이터 디렉토리 경로 확인
+        st.info(f"데이터 디렉토리 확인 중: '{STUDENT_DATA_DIR}'")
+
         try:
             if not os.path.exists(STUDENT_DATA_DIR):
-                st.info(f"데이터 디렉토리 '{STUDENT_DATA_DIR}'가 아직 없습니다. 학생 활동이 시작되면 생성됩니다.")
+                st.warning(f"'{STUDENT_DATA_DIR}' 디렉토리를 찾을 수 없습니다. 학생 활동이 있었는지 확인해주세요.")
                 student_files = []
             else:
                 student_files = sorted([f for f in os.listdir(STUDENT_DATA_DIR) if f.startswith("student_") and f.endswith(".json")], reverse=True)
+                # 디버깅 2: 찾은 파일 목록 출력
+                st.info(f"발견된 JSON 파일 목록: {student_files}")
+
         except Exception as e:
-            st.error(f"학생 데이터 파일 목록 로딩 오류: {e}")
+            st.error(f"학생 데이터 파일 목록 로딩 중 오류 발생: {e}")
             student_files = []
 
         if not student_files:
-            st.info("아직 저장된 학생 데이터가 없습니다.")
+            st.warning("발견된 학생 데이터 파일이 없습니다. (위 목록이 비어있는지 확인하세요)")
         else:
-            # 세션 상태 초기화 (교사 페이지 진입 시 한 번 또는 선택 변경 시)
-            if 'selected_student_file_teacher' not in st.session_state:
-                st.session_state.selected_student_file_teacher = None
-            if 'delete_confirmation_active' not in st.session_state:
-                st.session_state.delete_confirmation_active = False
-            if 'current_file_to_delete' not in st.session_state:
-                st.session_state.current_file_to_delete = None
-
-            # 콜백 함수: selectbox 값 변경 시 실행
-            def handle_student_selection():
-                # 현재 selectbox 위젯의 값을 session_state에 저장
-                st.session_state.selected_student_file_teacher = st.session_state.selectbox_student_files_widget
-                # 학생 선택이 변경되면 삭제 확인 상태 초기화
-                st.session_state.delete_confirmation_active = False
-                st.session_state.current_file_to_delete = None
-                # st.rerun() # 여기서 rerun하면 선택 후 바로 UI가 다시 그려져서 아래 로직이 실행됨
-
-            # selectbox의 현재 값(index) 설정
-            try:
-                current_selection_index = student_files.index(st.session_state.selected_student_file_teacher) if st.session_state.selected_student_file_teacher in student_files else 0 if student_files else None
-            except ValueError: # 이전에 선택한 파일이 삭제된 경우 등
-                current_selection_index = 0 if student_files else None
-                st.session_state.selected_student_file_teacher = None # 선택 초기화
-
-            st.selectbox(
+            # selectbox를 직접 변수에 할당. 콜백(on_change) 제거.
+            selected_student_file = st.selectbox(
                 "학생 선택:", 
                 student_files, 
-                index=current_selection_index,
+                index=0, # 기본으로 첫 번째 학생을 선택
                 placeholder="학생 기록을 보려면 선택하세요.", 
-                key="selectbox_student_files_widget", # 위젯을 위한 고유 키
-                on_change=handle_student_selection # 변경 시 콜백 실행
+                key="teacher_student_selector" # 키는 그대로 유지
             )
             
-            # 콜백 후, selected_student_file_teacher 세션 상태를 사용
-            selected_student_file = st.session_state.selected_student_file_teacher
-            # st.write(f"디버그: 선택된 파일 (세션 상태): {selected_student_file}") # 디버깅용
+            # 디버깅 3: Selectbox에서 어떤 파일이 선택되었는지 확인
+            st.info(f"Selectbox 선택 값: {selected_student_file}")
 
             if selected_student_file:
                 filepath = os.path.join(STUDENT_DATA_DIR, selected_student_file)
