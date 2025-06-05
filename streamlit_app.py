@@ -23,8 +23,8 @@ PAGE2_PROBLEM1_FEEDBACK_LOOP = {
 }
 PAGE4_PROBLEM3_GOAL_CONCEPT = "자료값과 평균 사이의 차이의 총합이 항상 0이 되도록 자료값을 조절하면 목표 평균을 달성할 수 있다는 점을 인지하는 것"
 PAGE4_PROBLEM3_SCAFFOLDING_PROMPT = """당신은 학생이 평균 개념을 깊이 이해하도록 돕는 AI 튜터입니다. 학생은 자신이 설정한 목표 평균을 달성하기 위해 그래프 자료값을 조절하는 활동을 했습니다. 이 과정에서 자신이 사용한 전략에 대해 설명하라는 질문에 답변했습니다. 학생의 답변이 목표 개념인 "{goal_concept}"과 얼마나 관련 있는지 평가해주세요. 목표 개념을 직접적으로 언급하거나 답을 알려주지 말고, 학생의 현재 이해 수준에서 다음 단계로 나아갈 수 있도록 유도하는 질문이나 발문을 생성해주세요. 학생의 답변이 목표 개념과 거리가 멀다면 기본적인 개념(자료의 총합과 개수)으로 돌아가는 발문을, 조금이라도 관련 있다면 편차의 합 등 심화 개념으로 나아가도록 발문을 시도해주세요. 응답은 'FEEDBACK:' 접두사로 시작해주세요."""
-CUMULATIVE_FEEDBACK_4 = "많은 어려움을 겪고 있는 것 같네요. 노란색과 초록색이 무엇을 의미하는 지 생각해보세요."
-CUMULATIVE_FEEDBACK_5 = "추가 힌트를 드릴게요! 노란색의 넓이와 초록색의 넓이를 비교해보세요!"
+CUMULATIVE_FEEDBACK_4 = "잘 해결할 수 있는 힌트를 드릴게요! 각각의 색이 무엇을 의미하는 지 생각해보세요."
+CUMULATIVE_FEEDBACK_5 = "추가 힌트를 드릴게요! 각각의 색의 넓이를 비교해보세요!"
 
 # 아래는 2-3, 2-4 루프/팝업 피드백 추가
 PAGE4_PROBLEM3_FEEDBACK_LOOP = {
@@ -274,7 +274,7 @@ def student_page_2_graph60():
         if st.session_state.get('page2_show_cumulative_popup5', False):
             if len(st.session_state['chat_log_page2']) == 0:
                 st.session_state['chat_log_page2'] = [
-                    {"role": "assistant", "content": "그래프를 조정하는 데 어려움을 겪고 있는 것 같아요. 그래프의 높낮이를 조절하면서 어떤 변화가 있는지 살펴보고, 도움이 필요한 부분이 있다면 질문해주세요."},
+                    {"role": "assistant", "content": "그래프의 높낮이를 조절하면서 어떤 변화가 있는지 살펴보고, 도움이 필요한 부분이 있다면 질문해주세요."},
                 ]
         if 'graph_prev_values' not in st.session_state:
             st.session_state['graph_prev_values'] = (0, 0, 0, 0, 0)
