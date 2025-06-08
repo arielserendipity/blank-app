@@ -5,7 +5,7 @@ from draggable_barchart2 import draggable_barchart2
 st.set_page_config(layout="wide")
 import json, time, os
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from openai import OpenAI
 
 from streamlit_extras.stylable_container import stylable_container
@@ -125,7 +125,7 @@ with st.sidebar:
 
 # --- 데이터 저장 ---
 def save_student_data(student_name, page, problem, student_answer, is_correct, attempt, feedback_history, cumulative_popup_shown, chatbot_interactions):
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M:%S %Z")
     safe_student_name = "".join(c if c.isalnum() else "_" for c in student_name)
     filename = os.path.join(STUDENT_DATA_DIR, f"student_{safe_student_name}.json")
     entry = {
@@ -1099,10 +1099,21 @@ def student_page_5_completion():
 # --- 교사용 페이지 (모든 데이터 표/엑셀) ---
 def teacher_page():
     st.header("교사용 페이지")
-    password = st.text_input("비밀번호를 입력하세요", type="password", key="teacher_pw_input_main")
+    if st.button("새로고침", key="teacher_refresh"):
+        st.rerun()
+        
+    if not st.session_state.get('logged_in', False):
+        password = st.text_input("비밀번호를 입력하세요", type="password", key="teacher_pw_input_main")
+    else:
+        password = ""
 
-    if password == TEACHER_PASSWORD:
-        st.success("🔑 비밀번호 인증 성공!")
+    if 'logged_in' not in st.session_state:
+        st.session_state['logged_in'] = False
+    if password == TEACHER_PASSWORD and not st.session_state['logged_in']:
+        st.session_state['logged_in'] = True
+        st.success("🔑 비밀번호 인증 성공! 교사용 페이지에 접속하였습니다.")
+
+    if 'logged_in' in st.session_state and st.session_state['logged_in']:
         if 'delete_confirmation_active' not in st.session_state:
             st.session_state.delete_confirmation_active = False
         if 'current_file_to_delete' not in st.session_state:
