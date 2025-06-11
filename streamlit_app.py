@@ -241,7 +241,7 @@ def evaluate_page4_problem3_with_gpt(student_answer, goal_concept, graph_values,
 평가 결과는 반드시 'CORRECT:' 또는 'INCORRECT:' 접두사로 시작해주세요. 
 - 학생이 만든 용돈 분포: {formatted_values} (실제 평균: {avg*1000:.0f}원)
 - 학생이 설명한 자신의 전략: "{student_answer}"
-학생의 피드백에는 그가 만든 실제 데이터({formatted_values})를 근거로 들어 설명해주세요. 
+학생의 피드백에는 그가 만든 실제 데이터({formatted_values})를 근거로 들어 설명해주세요. 단순히 "평균을 {avg}000원에 맞췄어."등의 응답은 오답으로 처리합니다. 구체적으로 막대그래프를 어떻게 조정하였는지를 이야기할 수 있도록 촉진해주세요.
 만약 학생이 '넘치는 값을 부족한 값에 줬어요'라고 설명했다면, "맞아요! 예를 들어 친구3의 용돈({formatted_values['친구3']})이 평균보다 많은데, 그 일부를 평균보다 용돈이 적은 친구1({formatted_values['친구1']})에게 나누어주는 전략을 사용했군요!"와 같이 구체적인 값으로 안내해주세요.
 그 뒤에 학생의 답변에 대한 짧고 격려하는 피드백을 추가해주세요. 피드백은 반드시 공백 포함 160자 이내로만 작성해주세요. 초등학생이 교육대상이므로 어렵거나 추상적인 표현 대신, 초등학생도 이해하기 쉬운 다정한 언어로 설명해주세요. 예를 들어, '평균선을 기준으로 높은 부분과 낮은 부분이 같아.', '자료의 값들을 다 더하면 평균*5야' 등의 응답도 학습 목표를 달성했다고 봅니다. """
     user_message = f"""학생의 답변: {student_answer}"""
@@ -861,7 +861,7 @@ def student_page_4_myavg_tasks():
 
         elif current_problem_index == 3:
             st.subheader("과제 2-3")
-            st.write(f"여러분들이 예측한 용돈 평균 {target_avg}000원을 만들기 위해 어떤 방법을 사용했나요?")
+            st.write(f"여러분들이 예측한 용돈 평균 {target_avg}000원을 만들기 위해 막대그래프를 어떻게 움직였나요? 구체적인 방법을 적어주세요.")
             is_input_disabled = st.session_state.get('p4p3_correct', False)
             student_answer = st.text_area("여기에 방법을 작성하세요:", height=150, key="p4p3_answer_input", value=st.session_state.get('p4p3_answer', ''), disabled=is_input_disabled)
             attempts = st.session_state.get('p4p3_attempts', 0)
