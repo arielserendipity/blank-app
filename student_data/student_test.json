@@ -434,5 +434,707 @@
         ],
         "cumulative_popup_shown": [],
         "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 21:54:52 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 21:54:54 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "ㅇㅇ",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 21:54:56 UTC+09:00",
+        "page": 2,
+        "problem": "예제2-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 21:54:57 UTC+09:00",
+        "page": 2,
+        "problem": "예제2-이유",
+        "student_answer": "ㅇㅇ",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 21:54:59 UTC+09:00",
+        "page": 2,
+        "problem": "예제3-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 21:55:00 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "ㅇㅇ",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 21:55:04 UTC+09:00",
+        "page": 2,
+        "problem": "예제4-답변",
+        "student_answer": "300",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 21:55:12 UTC+09:00",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            6,
+            6,
+            6,
+            4,
+            8
+        ],
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "오답이에요. 지금의 평균은 6.00입니다. 평균이 5가 되게 만들어주세요. 평균을 수정하고 싶다면 '뒤로 가기' 버튼을 눌러주세요."
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 21:55:17 UTC+09:00",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            6,
+            6,
+            6,
+            4,
+            3
+        ],
+        "is_correct": true,
+        "attempt": 2,
+        "feedback_history": [
+            "오답이에요. 지금의 평균은 6.00입니다. 평균이 5가 되게 만들어주세요. 평균을 수정하고 싶다면 '뒤로 가기' 버튼을 눌러주세요.",
+            "좋아요! 평균이 5.00으로 잘 만들어주었어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 21:55:23 UTC+09:00",
+        "page": 4,
+        "problem": "2-2",
+        "student_answer": [
+            6,
+            6,
+            1,
+            9,
+            3
+        ],
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "좋아요! 학생이 만든 것처럼 자료의 값이 너무 높거나 너무 낮아도 평균 5을 가질 수 있어요."
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:02:01 UTC+09:00",
+        "page": 4,
+        "problem": "2-4",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 과제를 해결하면서 알게 된 사실을 생각해보세요!? 그래프에서 본 값들은 서로 많이 다르기도 했어요. 그런데 평균을 내면, 실제 그래프에 있는 값 중에는 평균과 똑같은 게 없을 수도 있답니다! 신기하게도 평균은 꼭 원래 있던 금액과 같지 않을 수 있어요. 이 점이 왜 그런지, 혹시 생각해 본 적 있나요?"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:02:07 UTC+09:00",
+        "page": 4,
+        "problem": "2-4",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 2,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 과제를 해결하면서 알게 된 사실을 생각해보세요!? 그래프에서 본 값들은 서로 많이 다르기도 했어요. 그런데 평균을 내면, 실제 그래프에 있는 값 중에는 평균과 똑같은 게 없을 수도 있답니다! 신기하게도 평균은 꼭 원래 있던 금액과 같지 않을 수 있어요. 이 점이 왜 그런지, 혹시 생각해 본 적 있나요?",
+            "음... 다시 생각해볼까요? 평균은 자료를 대표하는 값이에요. 평균이 항상 자료 중간에 있나요? 그래프에서 보았던 값들 중에 평균이 항상 실제로 있는 값과 똑같지는 않을 수 있다는 점이 흥미로워요. 예를 들어 친구 5명이 가진 돈의 평균이 3,400원이지만, 실제로 3,400원을 가진 친구는 없을 수도 있죠. 이런 상황에서 평균은 그저 여러 값들을 고르게 섞은 느낌이에요. 혹시 이런 평균의 특징이 왜 생기는지 스스로 생각해 볼 수 있을까요?"
+        ],
+        "cumulative_popup_shown": [
+            "CUMULATIVE_FEEDBACK_4_4_P4P4"
+        ],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:02:13 UTC+09:00",
+        "page": 4,
+        "problem": "2-4",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 3,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 과제를 해결하면서 알게 된 사실을 생각해보세요!? 그래프에서 본 값들은 서로 많이 다르기도 했어요. 그런데 평균을 내면, 실제 그래프에 있는 값 중에는 평균과 똑같은 게 없을 수도 있답니다! 신기하게도 평균은 꼭 원래 있던 금액과 같지 않을 수 있어요. 이 점이 왜 그런지, 혹시 생각해 본 적 있나요?",
+            "음... 다시 생각해볼까요? 평균은 자료를 대표하는 값이에요. 평균이 항상 자료 중간에 있나요? 그래프에서 보았던 값들 중에 평균이 항상 실제로 있는 값과 똑같지는 않을 수 있다는 점이 흥미로워요. 예를 들어 친구 5명이 가진 돈의 평균이 3,400원이지만, 실제로 3,400원을 가진 친구는 없을 수도 있죠. 이런 상황에서 평균은 그저 여러 값들을 고르게 섞은 느낌이에요. 혹시 이런 평균의 특징이 왜 생기는지 스스로 생각해 볼 수 있을까요?",
+            "음... 다시 생각해볼까요? 평균의 함정은 언제 발생할까요? 너무 큰 값이나 작은 값이 있는 경우를를 생각해보세요. 그래프의 값들을 보면서 평균을 생각하면, 평균이 그래프 위의 어떤 한 숫자와 똑같지 않을 수도 있다는 점이 흥미롭지? 평균은 실제로 존재하는 값이 아닐 수도 있어. 그리고 모든 값들이 똑같지 않다면, 평균을 대표값으로 쓸 때 주의해야 해. 만약 그래프에 아주 크거나 작은 값이 하나 있다면, 그 값이 평균을 얼마나 달라지게 할지도 궁금하지 않아? 이런 점들을 생각하며 다시 그래프를 살펴보면 더 재미있을 거야!"
+        ],
+        "cumulative_popup_shown": [
+            "CUMULATIVE_FEEDBACK_5_4_P4P4",
+            "ChatbotActive_P4P4"
+        ],
+        "chatbot_interactions": [
+            {
+                "role": "assistant",
+                "content": "평균의 특징이나 함정에 대해 궁금한 점이 있나요? 무엇이든 질문해보세요!"
+            }
+        ]
+    },
+    {
+        "timestamp": "2025-06-12 22:31:17 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:31:18 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "dd",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:31:21 UTC+09:00",
+        "page": 2,
+        "problem": "예제2-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:31:22 UTC+09:00",
+        "page": 2,
+        "problem": "예제2-이유",
+        "student_answer": "dd",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:31:24 UTC+09:00",
+        "page": 2,
+        "problem": "예제3-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:31:26 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "dd",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:31:29 UTC+09:00",
+        "page": 2,
+        "problem": "예제4-답변",
+        "student_answer": "300",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:31:44 UTC+09:00",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "평균선을 기준으로 위에와 아래가 같아",
+        "is_correct": true,
+        "attempt": 0,
+        "feedback_history": [
+            "🎉 그래, 네가 만든 그래프처럼 모든 값이 60이면 평균선 위와 아래가 똑같이 맞춰져 있어! 아주 잘 이해했어. 혹시 1회는 70점, 2회는 50점처럼 점수를 다르게 해도 평균이 60이 될 수 있을까? 여러 가지 방법으로 그래프를 만들어보면 더 재미있을 거야! 정말 잘했어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:32:23 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:32:26 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "ㅇㅇ",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:32:27 UTC+09:00",
+        "page": 2,
+        "problem": "예제2-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:32:29 UTC+09:00",
+        "page": 2,
+        "problem": "예제2-이유",
+        "student_answer": "ㅇㅇ",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:32:31 UTC+09:00",
+        "page": 2,
+        "problem": "예제3-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:32:33 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "ㅇㅇ",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:32:36 UTC+09:00",
+        "page": 2,
+        "problem": "예제4-답변",
+        "student_answer": "300",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:32:45 UTC+09:00",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "평균선을 기준으로 위에와 아래가 같아",
+        "is_correct": true,
+        "attempt": 0,
+        "feedback_history": [
+            "🎉 그래, 네가 만든 그래프처럼 {'1회': 60, '2회': 60, '3회': 60, '4회': 60, '5회': 60}에서는 평균선 위와 아래가 똑같아! 아주 잘 설명했어. 혹시 평균이 60인데도 점수들이 모두 다르게 되어 있는 그래프도 만들 수 있을까? 정말 잘했어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:34:02 UTC+09:00",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "평균선을 기준으로 위에와 아래가 같아",
+        "is_correct": true,
+        "attempt": 0,
+        "feedback_history": [
+            "🎉 그래, 네가 만든 그래프처럼 {'1회': 60, '2회': 60, '3회': 60, '4회': 60, '5회': 60}에서는 평균선 위와 아래가 똑같아! 아주 잘 설명했어. 혹시 평균이 60인데도 점수들이 모두 다르게 되어 있는 그래프도 만들 수 있을까? 정말 잘했어요!",
+            "🎉 네, 아주 잘 설명해주었어요! 지금 만든 그래프처럼 {'1회': 60, '2회': 60, '3회': 60, '4회': 60, '5회': 60}는 평균선 위와 아래가 똑같아요. 혹시 점수들이 다 달라도 평균선 위와 아래가 같을 수 있을까요? 여러 가지 모양의 그래프도 한번 만들어보면 좋겠어요! 정말 멋진 설명이었어요. 정말 잘했어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:34:08 UTC+09:00",
+        "page": 2,
+        "problem": "과제1",
+        "student_answer": "평균선을 기준으로 위에와 아래가 같아",
+        "is_correct": true,
+        "attempt": 0,
+        "feedback_history": [
+            "🎉 그래, 네가 만든 그래프처럼 {'1회': 60, '2회': 60, '3회': 60, '4회': 60, '5회': 60}에서는 평균선 위와 아래가 똑같아! 아주 잘 설명했어. 혹시 평균이 60인데도 점수들이 모두 다르게 되어 있는 그래프도 만들 수 있을까? 정말 잘했어요!",
+            "🎉 네, 아주 잘 설명해주었어요! 지금 만든 그래프처럼 {'1회': 60, '2회': 60, '3회': 60, '4회': 60, '5회': 60}는 평균선 위와 아래가 똑같아요. 혹시 점수들이 다 달라도 평균선 위와 아래가 같을 수 있을까요? 여러 가지 모양의 그래프도 한번 만들어보면 좋겠어요! 정말 멋진 설명이었어요. 정말 잘했어요!",
+            "🎉 아주 잘 설명해주었어요! 지금 만든 그래프처럼 모든 값이 60이면 평균선 위와 아래가 똑같이 맞춰져 있어요. 혹시 값이 다르게 되어도 평균선 위와 아래가 같을 수 있을까요? 앞으로도 여러 가지 그래프를 만들어보며 생각해보면 좋겠어요! 정말 잘했어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:39:43 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:39:46 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "dd",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:39:47 UTC+09:00",
+        "page": 2,
+        "problem": "예제2-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:39:49 UTC+09:00",
+        "page": 2,
+        "problem": "예제2-이유",
+        "student_answer": "dd",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:39:51 UTC+09:00",
+        "page": 2,
+        "problem": "예제3-답변",
+        "student_answer": "예",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:39:53 UTC+09:00",
+        "page": 2,
+        "problem": "예제1-이유",
+        "student_answer": "dd",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:39:56 UTC+09:00",
+        "page": 2,
+        "problem": "예제4-답변",
+        "student_answer": "300",
+        "is_correct": true,
+        "attempt": 1,
+        "feedback_history": [
+            "정답"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:41:31 UTC+09:00",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            6,
+            6,
+            6,
+            4,
+            4
+        ],
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "오답이에요. 지금의 평균은 5.20입니다. 평균이 5가 되게 만들어주세요. 평균을 수정하고 싶다면 '뒤로 가기' 버튼을 눌러주세요."
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:41:35 UTC+09:00",
+        "page": 4,
+        "problem": "2-1",
+        "student_answer": [
+            6,
+            6,
+            6,
+            4,
+            3
+        ],
+        "is_correct": true,
+        "attempt": 2,
+        "feedback_history": [
+            "오답이에요. 지금의 평균은 5.20입니다. 평균이 5가 되게 만들어주세요. 평균을 수정하고 싶다면 '뒤로 가기' 버튼을 눌러주세요.",
+            "좋아요! 평균이 5.00으로 잘 만들어주었어요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:44:59 UTC+09:00",
+        "page": 4,
+        "problem": "2-2",
+        "student_answer": [
+            6,
+            6,
+            6,
+            4,
+            3
+        ],
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "앞에서 제출한 자료 의값들과 같습니다. 다른 경우를 생각해보세요!"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:45:03 UTC+09:00",
+        "page": 4,
+        "problem": "2-2",
+        "student_answer": [
+            6,
+            6,
+            1,
+            4,
+            8
+        ],
+        "is_correct": true,
+        "attempt": 2,
+        "feedback_history": [
+            "앞에서 제출한 자료 의값들과 같습니다. 다른 경우를 생각해보세요!",
+            "좋아요! 학생이 만든 것처럼 자료의 값이 너무 높거나 너무 낮아도 평균 5을 가질 수 있어요."
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:45:47 UTC+09:00",
+        "page": 4,
+        "problem": "2-3",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 1,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이를 생각해보면 좋겠어요. 학생의 답변이 비어 있어서, 어떻게 그래프를 조작했는지, 또는 자료의 값과 평균 사이의 관계를 어떻게 생각했는지 알 수 없습니다. 예를 들어, 친구1(6000원), 친구2(6000원), 친구3(1000원), 친구4(4000원), 친구5(8000원)처럼 각 친구의 용돈이 평균(5000원)보다 많은 경우와 적은 경우가 있다는 점을 이야기해주"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:45:56 UTC+09:00",
+        "page": 4,
+        "problem": "2-3",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 2,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이를 생각해보면 좋겠어요. 학생의 답변이 비어 있어서, 어떻게 그래프를 조작했는지, 또는 자료의 값과 평균 사이의 관계를 어떻게 생각했는지 알 수 없습니다. 예를 들어, 친구1(6000원), 친구2(6000원), 친구3(1000원), 친구4(4000원), 친구5(8000원)처럼 각 친구의 용돈이 평균(5000원)보다 많은 경우와 적은 경우가 있다는 점을 이야기해주",
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이의 합이 0이 되는 순간을 찾으셨나요? 학생님께서 전략을 아직 작성하지 않으셨네요. 예를 들어, 친구들의 용돈이 평균보다 많거나 적을 때, 어떻게 막대그래프를 조절했는지 설명해주시면 좋아요. 예를 들어, 평균보다 높은 친구의 용돈을 조금 낮추고, 낮은 친구의 용돈을 올려서 평균에 가깝게 만들 수 있어요. 같은 평균이지만 친구들 용돈이 다르게 나올 수도 있다는 점도 생각해보면"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:46:11 UTC+09:00",
+        "page": 4,
+        "problem": "2-3",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 3,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이를 생각해보면 좋겠어요. 학생의 답변이 비어 있어서, 어떻게 그래프를 조작했는지, 또는 자료의 값과 평균 사이의 관계를 어떻게 생각했는지 알 수 없습니다. 예를 들어, 친구1(6000원), 친구2(6000원), 친구3(1000원), 친구4(4000원), 친구5(8000원)처럼 각 친구의 용돈이 평균(5000원)보다 많은 경우와 적은 경우가 있다는 점을 이야기해주",
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이의 합이 0이 되는 순간을 찾으셨나요? 학생님께서 전략을 아직 작성하지 않으셨네요. 예를 들어, 친구들의 용돈이 평균보다 많거나 적을 때, 어떻게 막대그래프를 조절했는지 설명해주시면 좋아요. 예를 들어, 평균보다 높은 친구의 용돈을 조금 낮추고, 낮은 친구의 용돈을 올려서 평균에 가깝게 만들 수 있어요. 같은 평균이지만 친구들 용돈이 다르게 나올 수도 있다는 점도 생각해보면",
+            "음... 다시 생각해볼까요? 막대를 조정하면서 평균과 각 자료의 값의 차이 합을 계속 0으로 맞추는 경험이 있었나요? 아직 자신의 전략에 대한 설명이 없어요. 자료의 값을 어떻게 조정해서 평균이 5000원이 되었는지 구체적으로 이야기해주면 더 좋아요. 예를 들어, 친구3의 용돈이 평균보다 적고, 친구5의 용돈이 평균보다 많다는 점을 활용해서, 평균보다 많은 친구의 용돈에서 일부를 평균보다 적은 친구에게 나눠주는 방법을 생각해볼 수도 있어요. 또, 같"
+        ],
+        "cumulative_popup_shown": [],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:46:47 UTC+09:00",
+        "page": 4,
+        "problem": "2-3",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 4,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이를 생각해보면 좋겠어요. 학생의 답변이 비어 있어서, 어떻게 그래프를 조작했는지, 또는 자료의 값과 평균 사이의 관계를 어떻게 생각했는지 알 수 없습니다. 예를 들어, 친구1(6000원), 친구2(6000원), 친구3(1000원), 친구4(4000원), 친구5(8000원)처럼 각 친구의 용돈이 평균(5000원)보다 많은 경우와 적은 경우가 있다는 점을 이야기해주",
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이의 합이 0이 되는 순간을 찾으셨나요? 학생님께서 전략을 아직 작성하지 않으셨네요. 예를 들어, 친구들의 용돈이 평균보다 많거나 적을 때, 어떻게 막대그래프를 조절했는지 설명해주시면 좋아요. 예를 들어, 평균보다 높은 친구의 용돈을 조금 낮추고, 낮은 친구의 용돈을 올려서 평균에 가깝게 만들 수 있어요. 같은 평균이지만 친구들 용돈이 다르게 나올 수도 있다는 점도 생각해보면",
+            "음... 다시 생각해볼까요? 막대를 조정하면서 평균과 각 자료의 값의 차이 합을 계속 0으로 맞추는 경험이 있었나요? 아직 자신의 전략에 대한 설명이 없어요. 자료의 값을 어떻게 조정해서 평균이 5000원이 되었는지 구체적으로 이야기해주면 더 좋아요. 예를 들어, 친구3의 용돈이 평균보다 적고, 친구5의 용돈이 평균보다 많다는 점을 활용해서, 평균보다 많은 친구의 용돈에서 일부를 평균보다 적은 친구에게 나눠주는 방법을 생각해볼 수도 있어요. 또, 같",
+            "음... 다시 생각해볼까요? 막대를 조정하면서 평균과 각 자료의 값의 차이 합을 계속 0으로 맞추는 경험이 있었나요? 아직 전략에 대한 설명이 없어요. 예를 들어, 친구들 용돈의 막대그래프에서 어떤 친구의 용돈을 올리거나 내리면서 평균을 맞췄는지 생각해 볼 수 있어요. 같은 평균이라도 다양한 용돈 분포가 될 수 있답니다. 어떻게 그래프를 조절했는지 이야기해 주세요! 다음에는 조금 더 구체적으로 설명해 주시면 좋겠어요."
+        ],
+        "cumulative_popup_shown": [
+            "CUMULATIVE_FEEDBACK_4_P4P3"
+        ],
+        "chatbot_interactions": []
+    },
+    {
+        "timestamp": "2025-06-12 22:47:25 UTC+09:00",
+        "page": 4,
+        "problem": "2-3",
+        "student_answer": "",
+        "is_correct": false,
+        "attempt": 5,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이를 생각해보면 좋겠어요. 학생의 답변이 비어 있어서, 어떻게 그래프를 조작했는지, 또는 자료의 값과 평균 사이의 관계를 어떻게 생각했는지 알 수 없습니다. 예를 들어, 친구1(6000원), 친구2(6000원), 친구3(1000원), 친구4(4000원), 친구5(8000원)처럼 각 친구의 용돈이 평균(5000원)보다 많은 경우와 적은 경우가 있다는 점을 이야기해주",
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이의 합이 0이 되는 순간을 찾으셨나요? 학생님께서 전략을 아직 작성하지 않으셨네요. 예를 들어, 친구들의 용돈이 평균보다 많거나 적을 때, 어떻게 막대그래프를 조절했는지 설명해주시면 좋아요. 예를 들어, 평균보다 높은 친구의 용돈을 조금 낮추고, 낮은 친구의 용돈을 올려서 평균에 가깝게 만들 수 있어요. 같은 평균이지만 친구들 용돈이 다르게 나올 수도 있다는 점도 생각해보면",
+            "음... 다시 생각해볼까요? 막대를 조정하면서 평균과 각 자료의 값의 차이 합을 계속 0으로 맞추는 경험이 있었나요? 아직 자신의 전략에 대한 설명이 없어요. 자료의 값을 어떻게 조정해서 평균이 5000원이 되었는지 구체적으로 이야기해주면 더 좋아요. 예를 들어, 친구3의 용돈이 평균보다 적고, 친구5의 용돈이 평균보다 많다는 점을 활용해서, 평균보다 많은 친구의 용돈에서 일부를 평균보다 적은 친구에게 나눠주는 방법을 생각해볼 수도 있어요. 또, 같",
+            "음... 다시 생각해볼까요? 막대를 조정하면서 평균과 각 자료의 값의 차이 합을 계속 0으로 맞추는 경험이 있었나요? 아직 전략에 대한 설명이 없어요. 예를 들어, 친구들 용돈의 막대그래프에서 어떤 친구의 용돈을 올리거나 내리면서 평균을 맞췄는지 생각해 볼 수 있어요. 같은 평균이라도 다양한 용돈 분포가 될 수 있답니다. 어떻게 그래프를 조절했는지 이야기해 주세요! 다음에는 조금 더 구체적으로 설명해 주시면 좋겠어요.",
+            "음... 다시 생각해볼까요? 막대를 조정하면서 평균과 각 자료의 값의 차이 합을 계속 0으로 맞추는 경험이 있었나요? 답변이 비어 있어서 전략을 알 수 없습니다. 예를 들어, 친구5의 용돈(8000원)처럼 평균보다 높은 값을 친구3(1000원)처럼 낮은 값과 비교하며 조정하는 방법을 생각해볼 수 있어요. 평균이 같아도 여러 가지 자료 분포가 나올 수 있다는 점도 함께 생각해보세요! 앞으로는 어떻게 막대그래프를 움직였는지 구체적으로 설명해주면 더 좋아요."
+        ],
+        "cumulative_popup_shown": [
+            "CUMULATIVE_FEEDBACK_5_P4P3",
+            "ChatbotActive_P4P3"
+        ],
+        "chatbot_interactions": [
+            {
+                "role": "system",
+                "content": "너는 초등학생의 평균 개념 학습을 돕는 친절한 AI 튜터야. 존댓말로 친절하게 말해주세요.\n                        학생이 ''라고 답변했지만, 5번 이상 오답을 제출해서 도움이 필요한 상황이야.\n                        학생이 설정한 목표 평균은 5000원이었어.\n                        학생이 평균과 각 자료 값의 차이의 합이 0이 되어야 한다는 점을 깨닫도록 유도해줘. \n                        답을 직접 알려주지 말고, '평균보다 높은 값들과 낮은 값들은 어떤 관계가 있을까?' 와 같이 힌트를 주거나 질문을 던져서 학생이 스스로 생각하게 만들어줘."
+            },
+            {
+                "role": "assistant",
+                "content": "막대를 움직일 때 어떤 점을 가장 중요하게 생각했는지, 또는 어떤 기준으로 막대를 멈췄는지 이야기해줄 수 있나요?"
+            }
+        ]
+    },
+    {
+        "timestamp": "2025-06-12 22:48:02 UTC+09:00",
+        "page": 4,
+        "problem": "2-3",
+        "student_answer": "선보다 위에 있는 막대랑 부족한 막대랑 같게 했어요",
+        "is_correct": true,
+        "attempt": 6,
+        "feedback_history": [
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이를 생각해보면 좋겠어요. 학생의 답변이 비어 있어서, 어떻게 그래프를 조작했는지, 또는 자료의 값과 평균 사이의 관계를 어떻게 생각했는지 알 수 없습니다. 예를 들어, 친구1(6000원), 친구2(6000원), 친구3(1000원), 친구4(4000원), 친구5(8000원)처럼 각 친구의 용돈이 평균(5000원)보다 많은 경우와 적은 경우가 있다는 점을 이야기해주",
+            "음... 다시 생각해볼까요? 평균과 각 자료의 값의 차이의 합이 0이 되는 순간을 찾으셨나요? 학생님께서 전략을 아직 작성하지 않으셨네요. 예를 들어, 친구들의 용돈이 평균보다 많거나 적을 때, 어떻게 막대그래프를 조절했는지 설명해주시면 좋아요. 예를 들어, 평균보다 높은 친구의 용돈을 조금 낮추고, 낮은 친구의 용돈을 올려서 평균에 가깝게 만들 수 있어요. 같은 평균이지만 친구들 용돈이 다르게 나올 수도 있다는 점도 생각해보면",
+            "음... 다시 생각해볼까요? 막대를 조정하면서 평균과 각 자료의 값의 차이 합을 계속 0으로 맞추는 경험이 있었나요? 아직 자신의 전략에 대한 설명이 없어요. 자료의 값을 어떻게 조정해서 평균이 5000원이 되었는지 구체적으로 이야기해주면 더 좋아요. 예를 들어, 친구3의 용돈이 평균보다 적고, 친구5의 용돈이 평균보다 많다는 점을 활용해서, 평균보다 많은 친구의 용돈에서 일부를 평균보다 적은 친구에게 나눠주는 방법을 생각해볼 수도 있어요. 또, 같",
+            "음... 다시 생각해볼까요? 막대를 조정하면서 평균과 각 자료의 값의 차이 합을 계속 0으로 맞추는 경험이 있었나요? 아직 전략에 대한 설명이 없어요. 예를 들어, 친구들 용돈의 막대그래프에서 어떤 친구의 용돈을 올리거나 내리면서 평균을 맞췄는지 생각해 볼 수 있어요. 같은 평균이라도 다양한 용돈 분포가 될 수 있답니다. 어떻게 그래프를 조절했는지 이야기해 주세요! 다음에는 조금 더 구체적으로 설명해 주시면 좋겠어요.",
+            "음... 다시 생각해볼까요? 막대를 조정하면서 평균과 각 자료의 값의 차이 합을 계속 0으로 맞추는 경험이 있었나요? 답변이 비어 있어서 전략을 알 수 없습니다. 예를 들어, 친구5의 용돈(8000원)처럼 평균보다 높은 값을 친구3(1000원)처럼 낮은 값과 비교하며 조정하는 방법을 생각해볼 수 있어요. 평균이 같아도 여러 가지 자료 분포가 나올 수 있다는 점도 함께 생각해보세요! 앞으로는 어떻게 막대그래프를 움직였는지 구체적으로 설명해주면 더 좋아요.",
+            "🎉 네, 친구1(6000원), 친구2(6000원), 친구4(4000원), 친구5(8000원), 친구3(1000원)처럼 평균보다 많은 용돈과 적은 용돈이 서로 균형을 이루도록 조정하셨네요. 아주 잘하셨어요! 그런데 같은 평균이라도 친구들의 용돈 분포가 다르게 될 수 있다는 점도 한번 생각해보면 좋겠어요. 다른 방법으로도 평균이 같게 만들 수 있을 정말 잘했어요!"
+        ],
+        "cumulative_popup_shown": [
+            "CUMULATIVE_FEEDBACK_5_P4P3",
+            "ChatbotActive_P4P3"
+        ],
+        "chatbot_interactions": [
+            {
+                "role": "system",
+                "content": "너는 초등학생의 평균 개념 학습을 돕는 친절한 AI 튜터야. 존댓말로 친절하게 말해주세요.\n                        학생이 ''라고 답변했지만, 5번 이상 오답을 제출해서 도움이 필요한 상황이야.\n                        학생이 설정한 목표 평균은 5000원이었어.\n                        학생이 평균과 각 자료 값의 차이의 합이 0이 되어야 한다는 점을 깨닫도록 유도해줘. \n                        답을 직접 알려주지 말고, '평균보다 높은 값들과 낮은 값들은 어떤 관계가 있을까?' 와 같이 힌트를 주거나 질문을 던져서 학생이 스스로 생각하게 만들어줘."
+            },
+            {
+                "role": "assistant",
+                "content": "막대를 움직일 때 어떤 점을 가장 중요하게 생각했는지, 또는 어떤 기준으로 막대를 멈췄는지 이야기해줄 수 있나요?"
+            }
+        ]
     }
 ]
